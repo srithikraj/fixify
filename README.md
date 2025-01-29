@@ -46,6 +46,7 @@ For service providers, Fixify offers a platform to:
 - **Geetika Hanumara** ([ghanumar@uwaterloo.ca](mailto:ghanumar@uwaterloo.ca))
 - **Arshita** ([aarshita@uwaterloo.ca](mailto:aarshita@uwaterloo.ca))
 - **Bhargav Parekh** ([bnparekh@uwaterloo.ca](mailto:bnparekh@uwaterloo.ca))
+- **Raghul Chandrasekaran** ([r5chandr@uwaterloo.ca](mailto:r5chandr@uwaterloo.ca))
 
 
 ---
