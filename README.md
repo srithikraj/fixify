@@ -9,6 +9,7 @@ Fixify is a home services app designed to connect users with local, reliable ser
 - [About the Project](#about-the-project)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
 - [Team Members](#team-members)
 
 ---
@@ -35,20 +36,32 @@ For service providers, Fixify offers a platform to:
 ---
 
 ## Tech Stack
-- **Frontend/Backend:** React
-- **Database:** Firebase
+- **Frontend:** React (Vite)
+- **Backend:** Firebase
 - **Deployment:** AWS
 
 ---
 
-## Team Members
-- **Rithikraj Sowdermett** ([rsowderm@uwaterloo.ca](mailto:rsowderm@uwaterloo.ca))
-- **Geetika Hanumara** ([ghanumar@uwaterloo.ca](mailto:ghanumar@uwaterloo.ca))
-- **Arshita** ([aarshita@uwaterloo.ca](mailto:aarshita@uwaterloo.ca))
-- **Bhargav Parekh** ([bnparekh@uwaterloo.ca](mailto:bnparekh@uwaterloo.ca))
+## Getting Started
 
+### Prerequisites
+Ensure you have the following installed on your system:
+- [Node.js](https://nodejs.org/) (Recommended version: 18+)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) (comes with Node.js)
+- [Git](https://git-scm.com/)
 
----
+### Installation and Setup
+Follow these steps to set up and run Fixify locally:
 
-We’re excited to bring Fixify to life and make home service management easier for everyone!
+#### 1️⃣ Clone the Repository
+```sh
+git clone [https://github.com/srithikraj/fixify.git]()
+cd fixify
+cd source_code
+```
 
+### 2️⃣ Install Dependencies & Start the Development Server
+```sh
+npm install
+npm run dev
+```
