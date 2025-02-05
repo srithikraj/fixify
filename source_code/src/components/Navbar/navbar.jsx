@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,12 +10,10 @@ import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import logo from '../../assets/logo.png';
-
-
 export default function Navbar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const navigate = useNavigate();
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -23,6 +22,9 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
+  const goToSignup = () => {
+    navigate("/create-account")
+  }
   return (
     <>
       {/* Frosted Glass Navbar with Rounded Edges */}
@@ -50,7 +52,7 @@ export default function Navbar() {
           <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
             <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>Home</Button>
             <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>LOGIN</Button>
-            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>SIGNUP</Button>
+            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignup}>SIGNUP</Button>
 
             {/* Profile Icon */}
             {auth && (
