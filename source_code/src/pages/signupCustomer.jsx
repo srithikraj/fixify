@@ -8,6 +8,7 @@ export default function SignupCustomer() {
         height: "100vh",
         background: "linear-gradient(to bottom right, #7e57c2, #000)",
         color: "white",
+
       }}
     // className="container"
     >
