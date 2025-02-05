@@ -3,21 +3,20 @@ import Footer from '../components/Footer/footer'
 import Hero from '../components/Hero/hero'
 import HowItWorks from '../components/howitworks/howworks'
 import Navbar from '../components/Navbar/Navbar'
-import ReadyToGetStarted from '../components/getstarted/getstarted'   
-import ServicesSection from '../components/serviceSection/serviceSection' 
+import ReadyToGetStarted from '../components/getstarted/getstarted'
+import ServicesSection from '../components/serviceSection/serviceSection'
 
-
-function home() {
+function Home() {
   return (
     <>
-    <Navbar />
-    <Hero />
-    <HowItWorks />
-    <ServicesSection />
-    <ReadyToGetStarted />
-    <Footer />
+      <Navbar />
+      <Hero />
+      <HowItWorks />
+      <ServicesSection />
+      <ReadyToGetStarted />
+      <Footer />
     </>
   )
 }
 
-export default home
+export default Home
