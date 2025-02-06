@@ -1,5 +1,7 @@
 import React from "react";
 import "../index.css"
+import { FcGoogle } from "react-icons/fc";
+import { FaPhone } from "react-icons/fa6";
 export default function SignupCustomer() {
   return (
     <div
@@ -60,11 +62,12 @@ export default function SignupCustomer() {
               cursor: "pointer",
             }}
           >
-            <img
+            <FcGoogle />
+            {/* <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
               alt="Google logo"
               style={{ width: "1rem", height: "1rem" }}
-            />
+            /> */}
             Sign up with Google
           </button>
           <button
@@ -79,11 +82,12 @@ export default function SignupCustomer() {
               cursor: "pointer",
             }}
           >
-            <img
+            {/* <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phone_font_awesome.svg/1024px-Phone_font_awesome.svg.png"
               alt="Phone logo"
               style={{ width: "1rem", height: "1rem" }}
-            />
+            /> */}
+            <FaPhone/>
             Sign up with phone
           </button>
         </div>
