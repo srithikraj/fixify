@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar/Navbar'
 import ReadyToGetStarted from '../components/getstarted/getstarted'
 import ServicesSection from '../components/serviceSection/serviceSection'
 
+
 function Home() {
   return (
     <>
