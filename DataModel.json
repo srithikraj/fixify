@@ -1,0 +1,83 @@
+//*********************************
+// Fixify Data Model
+//*********************************
+
+
+//=================================
+// "users" collection
+//=================================
+"user":
+{
+	"_id":ObjectID,
+	"username":String,
+	"password":String, // ONLY storing the hash of the password
+	"first_name":String,
+	"last_name":String,
+	"email":String,
+	"phone":String,
+	"role":String, // must be "consumer" or "provider" or "admin"
+	"address":
+	{
+		"line1":String,
+		"line2":String,
+		"unit_no":String,
+		"postal_code":String,
+		"province":String,
+		"country":String,
+		"longitude":Double,
+		"latitude":Double
+	}
+}
+///////////////////////////////////
+
+
+//=================================
+// "services" collection
+//=================================
+"service":
+{
+	"_id":ObjectID,
+	"type":String,
+	"description":String,
+	"hourly_rate":Double,
+}
+///////////////////////////////////
+
+
+//=================================
+// "service_providers" collection
+//=================================
+"service_provider":
+{
+	"_id":ObjectID,
+	"user_id":users.ObjectID // Reference to users._id
+	"status":String, // must be "pending" or "verified"
+	"services":[services.ObjectID], // List of references to services._id
+	"availability":
+	{
+		"monday":[String], // ex. ["09:00-13:00", "15:00-20:00"]
+		"tuesday":[String],
+		"wednesday":[String],
+		"thursday":[String],
+		"friday":[String],
+		"saturday":[String],
+		"sunday":[String]
+	}
+	"ratings":Double,
+	"reviews_count":Long
+}
+///////////////////////////////////
+
+
+//=================================
+// "reviews" collection
+//=================================
+"review":
+{
+	"_id":ObjectID,
+	"consumer":users.ObjectID // Reference to users._id
+	"provider":users.ObjectID // Reference to users._id
+	"description":String
+	"rating":Integer
+}
+///////////////////////////////////
