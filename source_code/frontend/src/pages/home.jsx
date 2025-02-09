@@ -5,6 +5,7 @@ import HowItWorks from '../components/howitworks/howworks'
 import Navbar from '../components/Navbar/Navbar'
 import ReadyToGetStarted from '../components/getstarted/getstarted'
 import ServicesSection from '../components/serviceSection/serviceSection'
+import WorkerManagementForm from "./serviceProviderMgmt"
 
 
 function Home() {
