@@ -58,14 +58,28 @@ Follow these steps to set up and run Fixify locally:
 ```sh
 git clone [https://github.com/srithikraj/fixify.git]()
 cd fixify
-cd source_code
 ```
 
-### 2️⃣ Install Dependencies & Start the Development Server
+### 2️⃣ Install Dependencies for Frontend and Backend
+- OPTION 1: run `sh ./setup.sh`
+- OPTION 2:
 ```sh
+cd source_code
+cd frontend
 npm install
+cd ..
+
+cd backend
+npm install
+cd ..
+```
+
+### 3️⃣ Start the Frontend Development Server
+```sh
+cd frontend
 npm run dev
 ```
+
 =======
 ## Team Members
 - **Rithikraj Sowdermett** ([rsowderm@uwaterloo.ca](mailto:rsowderm@uwaterloo.ca))
