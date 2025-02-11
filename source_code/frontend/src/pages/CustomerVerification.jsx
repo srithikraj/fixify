@@ -16,6 +16,7 @@ const OTPVerification = () => {
                             borderRadius: "10px",
                             color: "white"
                         }}
+                        
                     ></div>
                 </div>
 
