@@ -1,5 +1,5 @@
 import React from "react";
-import verification from "../assets/verification.avif"
+import verification from "../assets/verification.avif";
 const OTPVerification = () => {
     console.log("veri", verification);
     return (
