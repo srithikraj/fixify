@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from "../assets/logo.png"
-import vid from "../../public/vid.mp4"
-const Aboutus = () => {
+
+const App = () => {
   const styles = {
     body: {
       margin: 0,
@@ -53,6 +53,11 @@ const Aboutus = () => {
       borderRadius: '5px',
       cursor: 'pointer',
     },
+    sectionTitle: {
+      fontSize: '70px',
+      textAlign: 'center',
+      margin: '80px 0 40px 0',
+    },
     aboutUs: {
       padding: '10px 30px',
       display: 'flex',
@@ -61,10 +66,6 @@ const Aboutus = () => {
       alignItems: 'center',
       textAlign: 'center',
       marginTop: '20px',
-    },
-    aboutTitle: {
-      fontSize: '50px',
-      marginBottom: '10px',
     },
     aboutContent: {
       display: 'flex',
@@ -78,14 +79,14 @@ const Aboutus = () => {
     aboutText: {
       fontSize: '24px',
       maxWidth: '500px',
-      textAlign: 'justify', // Align text to the left within the column
+      textAlign: 'justify',
     },
     aboutVideo: {
       width: '400px',
       height: '400px',
       objectFit: 'cover',
       borderRadius: '10px',
-      marginLeft: '20px', // Shift video slightly to the right
+      marginLeft: '20px',
     },
     footerBorder: {
       width: '100%',
@@ -93,6 +94,46 @@ const Aboutus = () => {
       backgroundImage: 'url("footer-image.png")',
       backgroundSize: 'cover',
       marginTop: 'auto',
+    },
+    teamSection: {
+      position: 'relative',
+      width: '100%',
+      textAlign: 'center',
+      paddingBottom: '100px',
+    },
+    teamBackground: {
+      width: '100%',
+      height: '700px',
+      backgroundImage: 'url("team-background.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      position: 'absolute',
+      top: '50px',
+      left: '0',
+    },
+    teamMembers: {
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      gap: '50px',
+      marginTop: '100px',
+    },
+    teamMember: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    teamImage: {
+      width: '140px',
+      height: '140px',
+      borderRadius: '50%',
+      objectFit: 'cover',
+    },
+    teamName: {
+      fontSize: '24px',
+      marginTop: '10px',
+      color: 'black',
     },
   };
 
@@ -110,7 +151,7 @@ const Aboutus = () => {
 
       {/* About Us Section */}
       <section style={styles.aboutUs}>
-        <h2 style={styles.aboutTitle}>ABOUT US</h2>
+        <h2 style={styles.sectionTitle}>ABOUT US</h2>
         <div style={styles.aboutContent}>
           <p style={styles.aboutText}>
             Welcome to FIXIFY! - the easiest way to find, connect, and fix what’s broken in your home. We help you discover local service providers nearby—no booking hassle, just simple contact details to get the job done.
@@ -118,16 +159,32 @@ const Aboutus = () => {
             We get it—things break. But finding the right person to fix it shouldn't be a headache. That’s why we created FIXIFY! We made it easy to connect with trusted pros in your area so you can get back to what matters.
           </p>
           <video style={styles.aboutVideo} autoPlay loop muted playsInline>
-            <source src={vid} type="video/mp4" />
+            <source src="vid.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
       </section>
 
+      {/* OUR TEAM Section */}
+<section style={styles.teamSection}>
+  <h2 style={styles.sectionTitle}>MEET OUR TEAM</h2>
+  <p style={{ fontSize: '24px', fontWeight: 'normal', color: 'gray', marginTop: '5px' }}>
+    THE DREAM TEAM (as long as it's not too early)
+  </p> {/* Reduced spacing by adjusting marginTop */}
+  <div style={styles.teamBackground}></div>
+  <div style={styles.teamMembers}>
+    {["Arshita", "Geetika", "Bhargav", "Raghul", "Rajveer", "Rithik"].map((name, index) => (
+      <div key={index} style={styles.teamMember}>
+        <img src={`${index + 1}.jpg`} alt={name} style={styles.teamImage} />
+        <p style={{ ...styles.teamName, fontWeight: 'bold' }}>{name}</p>
+      </div>
+    ))}
+  </div>
+</section>
       {/* Footer Border */}
       <div style={styles.footerBorder}></div>
     </div>
   );
 };
 
-export default Aboutus;
+export default App;
