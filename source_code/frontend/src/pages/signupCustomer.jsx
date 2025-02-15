@@ -1,30 +1,20 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import "../index.css"
 import { FcGoogle } from "react-icons/fc";
 import { FaPhone } from "react-icons/fa6";
 export default function SignupCustomer() {
+  const navigate = useNavigate();
+  const moveToVerification = () => {
+    navigate("/verify-customer")
+  }
   return (
     <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        background: "linear-gradient(to bottom right, #7e57c2, #000)",
-        color: "white",
-
-      }}
-    // className="container"
+      className="container"
     >
       {/* Left Panel */}
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "50%",
-          padding: "2rem",
-        }}
-      // className="left-panel "
+        className="left-panel "
       >
         <div style={{ textAlign: "center" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "1rem" }}>FIXIFY!</h1>
@@ -34,33 +24,13 @@ export default function SignupCustomer() {
 
       {/* Right Panel */}
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-          width: "50%",
-          padding: "2rem",
-          borderTopLeftRadius: "1.5rem",
-          borderBottomLeftRadius: "1.5rem",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
+        className="right-panel"
       >
         <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem", color: "black" }}>Create Account</h2>
 
         <div style={{ display: "flex", width: "100%", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem" }}>
           <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              border: "1px solid #d1d5db",
-              backgroundColor: "#f3f4f6",
-              cursor: "pointer",
-            }}
+            className="logo-button"
           >
             <FcGoogle />
             {/* <img
@@ -71,73 +41,40 @@ export default function SignupCustomer() {
             Sign up with Google
           </button>
           <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              border: "1px solid #d1d5db",
-              backgroundColor: "#f3f4f6",
-              cursor: "pointer",
-            }}
+            className="logo-button"
           >
             {/* <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phone_font_awesome.svg/1024px-Phone_font_awesome.svg.png"
               alt="Phone logo"
               style={{ width: "1rem", height: "1rem" }}
             /> */}
-            <FaPhone/>
+            <FaPhone />
             Sign up with phone
           </button>
         </div>
 
-        <p style={{ marginBottom: "1rem", color: "black" }}>-OR-</p>
+        <p style={{ marginBottom: "1rem", color: "black" }}>--OR--</p>
 
         <form style={{ width: "100%", maxWidth: "20rem" }}>
           <div style={{ marginBottom: "1rem" }}>
             <input
               type="text"
               placeholder="Full Name"
-              style={{
-                width: "100%",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                border: "1px solid #d1d5db",
-                color: "black",
-                outline: "none",
-                boxShadow: "0 0 0 2px transparent",
-              }}
+              className="input-box"
             />
           </div>
           <div style={{ marginBottom: "1rem" }}>
             <input
               type="email"
               placeholder="Email Address"
-              style={{
-                width: "100%",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                border: "1px solid #d1d5db",
-                color: "black",
-                outline: "none",
-                boxShadow: "0 0 0 2px transparent",
-              }}
+              className="input-box"
             />
           </div>
           <div style={{ marginBottom: "1rem", position: "relative" }}>
             <input
               type="password"
               placeholder="Password"
-              style={{
-                width: "100%",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                border: "1px solid #d1d5db",
-                color: "black",
-                outline: "none",
-                boxShadow: "0 0 0 2px transparent",
-              }}
+              className="input-box"
             />
             <span
               style={{
@@ -154,16 +91,8 @@ export default function SignupCustomer() {
           </div>
           <button
             type="submit"
-            style={{
-              width: "100%",
-              backgroundColor: "#ef4444",
-              color: "white",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              border: "none",
-              cursor: "pointer",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            }}
+            className="button"
+            onClick={moveToVerification}
           >
             Create Account
           </button>

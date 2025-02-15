@@ -9,18 +9,18 @@
     font-family: Arial, sans-serif;
 }
 
-/* Left Panel */
-.left-panel {
-    flex: 1;
-    /* background: linear-gradient(to bottom right, #7e57c2, #000); */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
-
 .text-center {
     text-align: center;
+}
+
+.left-panel {
+    background: linear-gradient(to bottom right, #7e57c2, #000);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    padding: 2rem;
 }
 
 .title {
@@ -144,4 +144,39 @@
 
 .login-link:hover {
     text-decoration: underline;
+}
+
+
+.logo-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    background-color: #f3f4f6;
+    cursor: pointer;
+}
+
+.input-box {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    color: black;
+    outline: none;
+    box-shadow: 0 0 0 2px transparent;
+}
+
+.button {
+    width: 100%;
+    background-color: #6a3267;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 1rem;
+    margin-top: 0.5rem;
 }
