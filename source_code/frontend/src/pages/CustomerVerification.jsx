@@ -1,7 +1,37 @@
-import React from "react";
+import React, { useRef } from "react";
 import verification from "../assets/verification.avif";
 const OTPVerification = () => {
-    console.log("veri", verification);
+    const inputRefs = useRef([]);
+    const handleChange = (e, index) => {
+        const { value } = e.target;
+        // Accept only the last character (if pasted multiple digits)
+        if (value.length > 0) {
+            e.target.value = value.slice(-1);
+            // Automatically focus the next input if it exists
+            if (index < inputRefs.current.length - 1) {
+                inputRefs.current[index + 1].focus();
+            }
+        }
+    };
+    const handleKeyDown = (e, index) => {
+        if (e.key === "ArrowLeft" && index > 0) {
+            inputRefs.current[index - 1].focus();
+        } else if (e.key === "ArrowRight" && index < inputRefs.current.length - 1) {
+            inputRefs.current[index + 1].focus();
+        } else if (e.key === "Backspace") {
+            // If current input has a value, clear it
+            if (e.target.value !== "") {
+                e.target.value = "";
+            } else if (index > 0) {
+                // Move to the previous input, clear it, and focus
+                inputRefs.current[index - 1].value = "";
+                inputRefs.current[index - 1].focus();
+            }
+            // Prevent the default backspace behavior
+            e.preventDefault();
+        }
+    };
+
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "linear-gradient(to bottom right, #7e57c2, #000)", }}>
             <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
@@ -16,7 +46,7 @@ const OTPVerification = () => {
                             borderRadius: "10px",
                             color: "white"
                         }}
-                        
+
                     ></div>
                 </div>
 
@@ -41,6 +71,9 @@ const OTPVerification = () => {
                                     key={index}
                                     type="text"
                                     maxLength="1"
+                                    ref={(el) => (inputRefs.current[index] = el)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    onChange={(e) => handleChange(e, index)}
                                     style={{
                                         width: "40px",
                                         height: "50px",
