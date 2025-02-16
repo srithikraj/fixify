@@ -1,0 +1,37 @@
+name: CI/CD - Auto-Merge PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check:
+    name: Basic Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Verify repo structure
+        run: ls -R  # Just checks the repo structure, replace with actual tests later
+
+  merge:
+    name: Auto-merge PR
+    needs: check  # Runs only if the check job succeeds
+    runs-on: ubuntu-latest
+    if: success()
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Auto-merge PR
+        uses: peter-evans/auto-merge@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge_method: merge
