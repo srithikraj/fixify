@@ -60,27 +60,38 @@ git clone [https://github.com/srithikraj/fixify.git]()
 cd fixify
 ```
 
-### 2️⃣ Install Dependencies for Frontend and Backend
-- OPTION 1: run `sh ./setup.sh`
-- OPTION 2:
-```sh
-cd source_code
-cd frontend
-npm install
-cd ..
+#### 2️⃣ Install Dependencies and Start Frontend App and Backend Server
+- OPTION 1: run `sh ./start.sh`
+- OPTION 2: follow the steps below
 
-cd backend
-npm install
-cd ..
-```
+    - ##### 2.2 Install Dependencies for Frontend and Backend
+        - OPTION 1: run `sh ./setup.sh`
+        - OPTION 2:
+            ```sh
+            cd source_code
+            cd frontend
+            npm install
+            cd ..
 
-### 3️⃣ Start the Frontend Development Server
-```sh
-cd frontend
-npm run dev
-```
+            cd backend
+            npm install
+            cd ..
+            ```
 
-=======
+    - ##### 2.3 Start the Frontend Development Server
+        ```sh
+        cd frontend
+        npm run dev
+        ```
+
+    - ##### 2.4 Start the Backend Server
+        ```sh
+        cd ../backend
+        node server.js
+        ```
+
+---
+
 ## Team Members
 - **Rithikraj Sowdermett** ([rsowderm@uwaterloo.ca](mailto:rsowderm@uwaterloo.ca))
 - **Geetika Hanumara** ([ghanumar@uwaterloo.ca](mailto:ghanumar@uwaterloo.ca))
