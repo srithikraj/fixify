@@ -1,0 +1,46 @@
+name: CI/CD - Test & Auto-Merge PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]  # Trigger on PR creation, update, or reopening
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '17'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run frontend tests
+        run: npm run test -- --watchAll=false  # Modify based on your test command
+
+      - name: Run backend tests
+        run: npm run backend-tests  # Modify based on your backend test script
+
+  merge:
+    name: Auto-merge PR
+    needs: test  # This job only runs if the test job is successful
+    runs-on: ubuntu-latest
+    if: success()  # Only run if tests pass
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Auto-merge PR
+        uses: peter-evans/auto-merge@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          merge_method: merge  # Options: 'merge', 'squash', or 'rebase'
