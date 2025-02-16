@@ -2,7 +2,12 @@ import React from "react";
 import "../index.css"
 import { FcGoogle } from "react-icons/fc";
 import { FaPhone } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 export default function SignupCustomer() {
+  const navigate = useNavigate();
+  const goToVerification = () => {
+    navigate("/verify-customer")
+  }
   return (
     <div
       style={{
@@ -87,7 +92,7 @@ export default function SignupCustomer() {
               alt="Phone logo"
               style={{ width: "1rem", height: "1rem" }}
             /> */}
-            <FaPhone/>
+            <FaPhone />
             Sign up with phone
           </button>
         </div>
@@ -164,7 +169,9 @@ export default function SignupCustomer() {
               cursor: "pointer",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             }}
+            onClick={goToVerification}
           >
+
             Create Account
           </button>
         </form>
