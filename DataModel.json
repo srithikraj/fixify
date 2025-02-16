@@ -37,7 +37,7 @@
 "service":
 {
 	"_id":ObjectID,
-	"type":String,
+	"type":String, // enum of plumbling, electrician, painting, contractor
 	"description":String,
 	"hourly_rate":Double,
 }
@@ -50,7 +50,7 @@
 "service_provider":
 {
 	"_id":ObjectID,
-	"user_id":users.ObjectID // Reference to users._id
+	"user_id":users.ObjectID, // Reference to users._id
 	"status":String, // must be "pending" or "verified"
 	"services":[services.ObjectID], // List of references to services._id
 	"availability":
