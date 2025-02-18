@@ -10,6 +10,8 @@ import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import logo from '../../assets/logo.png';
+import { Link } from "react-router-dom";
+
 export default function Navbar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -21,12 +23,10 @@ export default function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const goToSignup = () => {
-    navigate("/create-account")
-  }
+  
   return (
     <>
+
       {/* Frosted Glass Navbar with Rounded Edges */}
       <AppBar
         position="fixed"
@@ -52,7 +52,6 @@ export default function Navbar() {
           <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
             <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>Home</Button>
             <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>LOGIN</Button>
-            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignup}>SIGNUP</Button>
 
             {/* Profile Icon */}
             {auth && (

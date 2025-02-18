@@ -12,6 +12,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import ManageCustomers from './pages/ManageCustomers';
 import ManageWorkers from './pages/ManageWorkers';
 import AdminLayout from './pages/AdminLayout';
+import ContactUs from './pages/contact';
 const App = () => {
   return (
     <div>
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/verify-customer" element={<OTPVerification />} />
           <Route path="/signin" element={<LoginPage />} /> {/* Add Sign-in Route */}
           <Route path="/service-provider" element={<WorkerManagementForm />} />
+          <Route path="/contactus" element={<ContactUs />} />
 
           {/* <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/customers" element={<ManageCustomers />} />
