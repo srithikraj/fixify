@@ -10,6 +10,12 @@ import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import logo from '../../assets/logo.png';
+<<<<<<< Updated upstream:source_code/frontend/src/components/Navbar/navbar.jsx
+=======
+import React from "react";
+import { Link } from "react-router-dom";
+
+>>>>>>> Stashed changes:source_code/src/components/Navbar/navbar.jsx
 export default function Navbar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -21,12 +27,22 @@ export default function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+<<<<<<< Updated upstream:source_code/frontend/src/components/Navbar/navbar.jsx
 
   const goToSignup = () => {
     navigate("/create-account")
   }
+=======
+  
+>>>>>>> Stashed changes:source_code/src/components/Navbar/navbar.jsx
   return (
     <>
+    <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/about">About Us</Link></li>
+        <li><Link to="/contact">Contact</Link></li>
+        <li><Link to="/signin">Sign In</Link></li>
+      </ul>
       {/* Frosted Glass Navbar with Rounded Edges */}
       <AppBar
         position="fixed"
