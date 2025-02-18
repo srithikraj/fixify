@@ -8,6 +8,10 @@ import OTPVerification from './pages/CustomerVerification';
 import LoginPage from './pages/signin'; // Import LoginPage
 import WorkerManagementForm from './pages/serviceProviderMgmt'; // Import the service provider page
 
+import AdminDashboard from './pages/AdminDashboard';
+import ManageCustomers from './pages/ManageCustomers';
+import ManageWorkers from './pages/ManageWorkers';
+import AdminLayout from './pages/AdminLayout';
 const App = () => {
   return (
     <div>
@@ -19,6 +23,16 @@ const App = () => {
           <Route path="/verify-customer" element={<OTPVerification />} />
           <Route path="/signin" element={<LoginPage />} /> {/* Add Sign-in Route */}
           <Route path="/service-provider" element={<WorkerManagementForm />} />
+
+          {/* <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/customers" element={<ManageCustomers />} />
+          <Route path="/admin/workers" element={<ManageWorkers />} /> */}
+
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="customers" element={<ManageCustomers />} />
+            <Route path="workers" element={<ManageWorkers />} />
+        </Route>
         </Routes>
       </BrowserRouter>
     </div>
@@ -26,3 +40,6 @@ const App = () => {
 }
 
 export default App
+
+
+
