@@ -1,4 +1,6 @@
-# Simply run `./setup.sh`
+#!/bin/bash
+
+# Instruction: Simply run `./setup.sh`
 
 # Install node dependencies for frontend app
 cd source_code/frontend

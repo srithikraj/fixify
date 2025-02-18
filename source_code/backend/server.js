@@ -17,7 +17,13 @@ app.use(services)
 app.use(serviceProviders)
 app.use(reviews)
 
-app.listen( PORT, () => {
-    connect.connecToServer()
-    console.log(`Successfully Connected to DB. Server is running on port ${PORT}`)
+
+connect.connectToServer().then(() => {
+    console.log("BACKEND: Successfully connected to DB!")
+    app.listen( PORT, () => {
+        console.log(`BACKEND: Successfully started backend server! Listening on port ${PORT}`)
+    })
+}).catch((error) => {
+    console.log("BACKEND: Failed to connect to DB!")
+    console.log(error)
 })
