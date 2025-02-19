@@ -101,24 +101,6 @@ const WorkerManagementForm = () => {
               <TextField fullWidth label="Hourly Rate" name="hourlyRate" type="number" value={worker.hourlyRate} onChange={handleChange} required />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h5" gutterBottom>
-                Top Reviews
-              </Typography>
-              <List>
-                {worker.reviews.length > 0 ? (
-                  worker.reviews.map((review, index) => (
-                    <ListItem key={index} divider>
-                      <ListItemText primary={review} />
-                    </ListItem>
-                  ))
-                ) : (
-                  <ListItem>
-                    <ListItemText primary="No reviews available." />
-                  </ListItem>
-                )}
-              </List>
-            </Grid>
-            <Grid item xs={12}>
               <Button variant="contained" color="primary" fullWidth type="submit">
                 Submit
               </Button>
