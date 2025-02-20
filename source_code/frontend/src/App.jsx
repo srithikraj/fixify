@@ -7,7 +7,7 @@ import SignupCustomer from './pages/signupCustomer';
 import Aboutus from './pages/aboutUs';
 import OTPVerification from './pages/CustomerVerification';
 import LoginPage from './pages/signin'; // Import LoginPage
-import WorkerManagementForm from './pages/serviceProviderMgmt'; // Import the service provider page
+import WorkerManagementForm from './pages/serviceProviderLogin'; // Import the service provider page
 
 const App = () => {
   return (
