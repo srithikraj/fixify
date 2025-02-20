@@ -1,4 +1,9 @@
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField } from "@mui/material";
+import { useState } from "react";
+import { 
+  Box, Typography, Table, TableBody, TableCell, TableContainer, 
+  TableHead, TableRow, Paper, Button, TextField 
+} from "@mui/material";
+import ServiceProviderUpdateModal from "../components/serviceProviderModal/ServiceProviderUpdateModal"; // Import the modal component
 
 const workers = [
   { name: "John Doe", email: "john@example.com", service: "Plumbing", rating: 4.5 },
@@ -9,6 +14,19 @@ const workers = [
 ];
 
 const ManageWorkers = () => {
+  const [open, setOpen] = useState(false);
+  const [selectedWorker, setSelectedWorker] = useState(null);
+
+  const handleOpen = (worker) => {
+    setSelectedWorker(worker);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedWorker(null);
+  };
+
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
       <Typography variant="h4" fontWeight="bold">Manage Workers</Typography>
@@ -33,14 +51,24 @@ const ManageWorkers = () => {
                 <TableCell>{worker.service}</TableCell>
                 <TableCell>{worker.rating}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="primary" sx={{ mr: 1 }}>View</Button>
-                  <Button variant="contained" color="error">Delete</Button>
+                  <Button 
+                    variant="outlined" 
+                    color="primary" 
+                    sx={{ mr: 1 }} 
+                    onClick={() => handleOpen(worker)}
+                  >
+                    View
+                  </Button>
+                  <Button variant="contained" color="success">Varify</Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Worker Profile Modal */}
+      <ServiceProviderUpdateModal open={open} handleClose={handleClose} worker={selectedWorker} />
     </Box>
   );
 };
