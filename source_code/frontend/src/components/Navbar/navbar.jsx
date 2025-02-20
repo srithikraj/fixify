@@ -23,8 +23,18 @@ export default function Navbar() {
   };
 
   const goToSignup = () => {
-    navigate("/create-account")
+    navigate("/signup-choice")
   }
+
+  const goToSignin = () => {
+    navigate("/signin")
+  }
+
+  const goToHome = () => {
+    navigate("/")
+  }
+
+
   return (
     <>
       {/* Frosted Glass Navbar with Rounded Edges */}
@@ -50,8 +60,8 @@ export default function Navbar() {
 
           {/* Navbar Buttons (Right Side) */}
           <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
-            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>Home</Button>
-            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }}>LOGIN</Button>
+            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToHome}>Home</Button>
+            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignin}>LOGIN</Button>
             <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignup}>SIGNUP</Button>
 
             {/* Profile Icon */}
