@@ -32,7 +32,7 @@ import Aboutus from './pages/aboutUs';
 import OTPVerification from './pages/CustomerVerification';
 import LoginPage from './pages/signin'; // Import LoginPage
 import WorkerManagementForm from './pages/serviceProviderLogin'; // Import the service provider page
-
+import FindService from './pages/findService';
 import AdminDashboard from './pages/AdminDashboard';
 import ManageCustomers from './pages/AdminManageCustomers';
 import ManageWorkers from './pages/AdminManageWorkers';
@@ -52,6 +52,7 @@ const App = () => {
             <Route path="/signin" element={<LoginPage />} /> {/* Add Sign-in Route */}
             <Route path="/service-provider" element={<WorkerManagementForm />} />
             <Route path="/signup-choice" element={<SignupChoice />} />
+            <Route path="/findService" element={<FindService />} />
         </Route>
 
 
