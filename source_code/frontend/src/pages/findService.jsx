@@ -93,7 +93,6 @@ const FindService = () => {
       </div>
 
       <style jsx>{`
-        
           body {
           margin: 0;
           padding: 0;
