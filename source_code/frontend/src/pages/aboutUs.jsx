@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from "../assets/logo.png"
-
+import { Link } from 'react-router-dom';
 const App = () => {
   const styles = {
     body: {
@@ -144,8 +144,12 @@ const App = () => {
         <img src={logo} alt="Logo" style={styles.logo} />
         <h1 style={styles.companyName}>FIXIFY!</h1>
         <div style={styles.navButtons}>
-          <span style={styles.homeButton}>HOME</span>
-          <button style={styles.loginButton}>LOGIN</button>
+        <Link to="/" style={styles.homeButton}>
+          HOME
+        </Link>
+        <Link to="/signin" style={styles.loginButton}>
+        <button style={styles.loginButton}>LOGIN</button>
+        </Link>
         </div>
       </header>
 
