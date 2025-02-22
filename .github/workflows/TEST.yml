@@ -1,0 +1,37 @@
+name: CI/CD - Auto-Merge PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check:
+    name: Run Basic Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Verify repo structure
+        run: ls -R  # Dummy check, replace with actual tests later
+
+  merge:
+    name: Auto-Merge PR
+    needs: check
+    runs-on: ubuntu-latest
+    if: success()
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Enable Auto-Merge
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: merge  # Options: 'merge', 'squash', 'rebase'
