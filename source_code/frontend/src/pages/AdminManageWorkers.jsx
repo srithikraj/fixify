@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { 
-  Box, Typography, Table, TableBody, TableCell, TableContainer, 
-  TableHead, TableRow, Paper, Button, TextField 
+import { useEffect, useState } from "react";
+import {
+  Box, Typography, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Button, TextField
 } from "@mui/material";
 import ServiceProviderUpdateModal from "../components/serviceProviderModal/ServiceProviderUpdateModal"; // Import the modal component
-
 const workers = [
   { name: "John Doe", email: "john@example.com", service: "Plumbing", rating: 4.5 },
   { name: "Jane Smith", email: "jane@example.com", service: "Electrical", rating: 4.8 },
@@ -26,6 +25,29 @@ const ManageWorkers = () => {
     setOpen(false);
     setSelectedWorker(null);
   };
+  useEffect(() => {
+    fetchData()
+  }, []);
+
+  async function fetchData() {
+    try {
+      const response = await fetch("http://localhost:3000/serviceProviders", {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Data fetched:', data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
 
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -51,15 +73,15 @@ const ManageWorkers = () => {
                 <TableCell>{worker.service}</TableCell>
                 <TableCell>{worker.rating}</TableCell>
                 <TableCell>
-                  <Button 
-                    variant="outlined" 
-                    color="primary" 
-                    sx={{ mr: 1 }} 
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    sx={{ mr: 1 }}
                     onClick={() => handleOpen(worker)}
                   >
                     View
                   </Button>
-                  <Button variant="contained" color="success">Varify</Button>
+                  <Button variant="contained" color="success">Verify</Button>
                 </TableCell>
               </TableRow>
             ))}
