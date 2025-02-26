@@ -1,6 +1,8 @@
 const express = require("express")
 const database = require("../connect")
 const ObjectId = require("mongodb").ObjectId
+const jwt = require("jsonwebtoken")
+const { verifyToken } = require("./utils")
 
 let serviceRoutes = express.Router()
 
@@ -13,7 +15,7 @@ let serviceRoutes = express.Router()
  * URL: http://localhost:3000/services
  * Description: Get all services.
 */
-serviceRoutes.route("/services").get( async (request,response) => {
+serviceRoutes.route("/services").get( verifyToken, async (request,response) => {
     let db = database.getDb()
     let data = await db.collection("services").find({}).toArray()
     response.json( data )
@@ -24,7 +26,7 @@ serviceRoutes.route("/services").get( async (request,response) => {
  * URL: http://localhost:3000/services/${type}
  * Description: Get all services by type.
 */
-serviceRoutes.route("/services/:type").get( async (request,response) => {
+serviceRoutes.route("/services/:type").get( verifyToken, async (request,response) => {
     let db = database.getDb()
     let data = await db.collection("services").findOne({type: request.params.type})
     response.json( data )
