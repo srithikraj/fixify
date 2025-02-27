@@ -17,8 +17,8 @@ const userSchema = new Schema({
         postal_code: { type: String, required: true },
         province: { type: String, required: true },
         country: { type: String, required: true },
-        longitude: { type: Number, required: true },
-        latitude: { type: Number, required: true }
+        longitude: { type: Number },
+        latitude: { type: Number }
     }
 }, { timestamps: true });
 
