@@ -3,6 +3,8 @@ const database = require("../connect")
 const ObjectId = require("mongodb").ObjectId
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const User = require("../models/userModel")
+
 
 let userRoutes = express.Router()
 
@@ -40,6 +42,40 @@ userRoutes.route("/users/login").post( async (request, response) => {
         response.status(500).json({success: false, message: "An error occurred during login."})
     }
 })
+userRoutes.post("/signup", async (req, res) => {
+    try {
+        const { username, password, first_name, last_name, email, phone, role, address } = req.body;
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ message: "Username or email already exists." });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new user
+        const newUser = new User({
+            username,
+            password: hashedPassword,
+            first_name,
+            last_name,
+            email,
+            phone,
+            role,
+            address,
+        });
+
+        // Save user to database
+        await newUser.save();
+
+        res.status(201).json({ message: "User registered successfully!", userId: newUser._id });
+    } catch (error) {
+        console.error("Signup Error:", error);
+        res.status(500).json({ message: "Server error. Please try again later." });
+    }
+});
 
 //////////////////////////////////////////////////////////////////////////
 // Update Routes
