@@ -140,14 +140,14 @@ const App = () => {
   return (
     <div style={styles.app}>
       {/* Header Section */}
-      <header style={styles.header}>
+      {/* <header style={styles.header}>
         <img src={logo} alt="Logo" style={styles.logo} />
         <h1 style={styles.companyName}>FIXIFY!</h1>
         <div style={styles.navButtons}>
           <span style={styles.homeButton}>HOME</span>
           <button style={styles.loginButton}>LOGIN</button>
         </div>
-      </header>
+      </header> */}
 
       {/* About Us Section */}
       <section style={styles.aboutUs}>
