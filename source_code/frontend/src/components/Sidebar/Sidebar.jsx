@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import {
   Drawer,
   List,
@@ -18,6 +20,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
@@ -27,11 +30,16 @@ const Sidebar = () => {
     setOpen(!open);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/signin"); // Redirect to login after logout
+  };
+
   const menuItems = [
     { text: "Dashboard", icon: <Dashboard />, path: "/admin" },
     { text: "Customers", icon: <People />, path: "/admin/customers" },
     { text: "Workers", icon: <Work />, path: "/admin/workers" },
-    { text: "Logout", icon: <Logout />, path: "/logout" },
+    { text: "Logout", icon: <Logout />, path: "/signin", action: handleLogout },
   ];
 
   return (
@@ -66,7 +74,11 @@ const Sidebar = () => {
       key={index}
       component="div"
       onClick={() => {
-        navigate(item.path);
+        if (item.action) {
+          item.action(); // Call logout if action is defined
+        } else {
+          navigate(item.path);
+        }
         if (isMobile) toggleDrawer(); // Close drawer on mobile
       }}
       selected={location.pathname === item.path}
