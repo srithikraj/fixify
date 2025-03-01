@@ -66,6 +66,7 @@ const LoginPage = () => {
           background: "linear-gradient(to bottom right, #7e57c2, #000)",
           color: "white",
         }}
+
       >
         <Box component="img" src="/src/pages/WelcomeBack.jpg" alt="Welcome Image" sx={{
           width: "60%", mb: 2
