@@ -125,6 +125,7 @@ const LoginPage = () => {
                 fullWidth required autoFocus
                 type="password">
               </TextField>
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
