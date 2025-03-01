@@ -21,12 +21,12 @@ const LoginPage = () => {
   })
 
   useEffect(() => {
-    if(isAuthenticated){
+    if (isAuthenticated) {
       navigate("/")
     }
-  }, [isAuthenticated, navigate]) 
+  }, [isAuthenticated, navigate])
 
-  function handleChange(e){
+  function handleChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
 
@@ -34,8 +34,7 @@ const LoginPage = () => {
     e.preventDefault()
     console.log(user)
     let response = await verifyUser(user)
-    if( response.success )
-    {
+    if (response.success) {
       sessionStorage.setItem("token", response.token)
       axios.defaults.headers.common["Authorization"] = `Bearer ${response.token}`
       login(response.token, response.user);
@@ -44,10 +43,10 @@ const LoginPage = () => {
     } else {
       alert(response.message)
     }
-   
+
   }
-  
-  return(
+
+  return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       {/* Left side welcome panel */}
       <Grid
@@ -56,7 +55,7 @@ const LoginPage = () => {
         sm={6}
         md={6}
         sx={{
-          backgroundImage: "linear-gradient(to right, #1e3c72, #2a5298)",
+          // backgroundImage: "linear-gradient(to right, #1e3c72, #2a5298)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -65,6 +64,7 @@ const LoginPage = () => {
           padding: 4,
           flexDirection: "column",
           height: "100%",
+          background: "linear-gradient(to bottom right, #7e57c2, #000)",
         }}
       >
         <Box component="img" src="/src/pages/WelcomeBack.jpg" alt="Welcome Image" sx={{ width: "60%", mb: 2 }} />
@@ -77,15 +77,15 @@ const LoginPage = () => {
           </Typography>
         </Box>
       </Grid>
-      
+
       {/* Right side login panel */}
-      <Grid 
-        item 
-        xs={12} 
-        sm={6} 
-        md={6} 
-        component={Paper} 
-        elevation={6} 
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={6}
+        component={Paper}
+        elevation={6}
         square
         sx={{
           display: "flex",
@@ -103,23 +103,23 @@ const LoginPage = () => {
               alignItems: "center",
             }}
           >
-            <Typography 
-              component="h1" 
-              variant="h4" 
+            <Typography
+              component="h1"
+              variant="h4"
               sx={{ mt: 2, fontFamily: "Arial, sans-serif", fontWeight: "bold" }}
             >
-              SIGN IN
+              Login to Your Account
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
-              <TextField 
-                placeholder="Enter username" 
+              <TextField
+                placeholder="Enter username"
                 onChange={handleChange}
                 name="username"
-                fullWidth required autoFocus 
-                sx={{mb :2}}>
+                fullWidth required autoFocus
+                sx={{ mb: 2 }}>
               </TextField>
-              <TextField 
-                placeholder="Enter password" 
+              <TextField
+                placeholder="Enter password"
                 name="password"
                 onChange={handleChange}
                 fullWidth required autoFocus
@@ -129,8 +129,8 @@ const LoginPage = () => {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Sign In
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: "#ef4444", color: "white" }}>
+                Login
               </Button>
             </Box>
           </Box>
