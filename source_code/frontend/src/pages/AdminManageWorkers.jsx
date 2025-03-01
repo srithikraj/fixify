@@ -4,17 +4,18 @@ import {
   TableHead, TableRow, Paper, Button, TextField
 } from "@mui/material";
 import ServiceProviderUpdateModal from "../components/serviceProviderModal/ServiceProviderUpdateModal"; // Import the modal component
-const workers = [
-  { name: "John Doe", email: "john@example.com", service: "Plumbing", rating: 4.5 },
-  { name: "Jane Smith", email: "jane@example.com", service: "Electrical", rating: 4.8 },
-  { name: "Bob Johnson", email: "bob@example.com", service: "Carpentry", rating: 4.2 },
-  { name: "Alice Brown", email: "alice@example.com", service: "Painting", rating: 4.6 },
-  { name: "Charlie Davis", email: "charlie@example.com", service: "Gardening", rating: 4.7 }
-];
+// const workers = [
+//   { name: "John Doe", email: "john@example.com", service: "Plumbing", rating: 4.5 },
+//   { name: "Jane Smith", email: "jane@example.com", service: "Electrical", rating: 4.8 },
+//   { name: "Bob Johnson", email: "bob@example.com", service: "Carpentry", rating: 4.2 },
+//   { name: "Alice Brown", email: "alice@example.com", service: "Painting", rating: 4.6 },
+//   { name: "Charlie Davis", email: "charlie@example.com", service: "Gardening", rating: 4.7 }
+// ];
 
 const ManageWorkers = () => {
   const [open, setOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
+  const [workers, setWorker] = useState([]);
 
   const handleOpen = (worker) => {
     setSelectedWorker(worker);
@@ -41,8 +42,8 @@ const ManageWorkers = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
-      console.log('Data fetched:', data);
+      const res = await response.json();
+      setWorker(res.data)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -68,10 +69,10 @@ const ManageWorkers = () => {
           <TableBody>
             {workers.map((worker, index) => (
               <TableRow key={index}>
-                <TableCell>{worker.name}</TableCell>
-                <TableCell>{worker.email}</TableCell>
-                <TableCell>{worker.service}</TableCell>
-                <TableCell>{worker.rating}</TableCell>
+                <TableCell style={{ textTransform: "capitalize" }}>{worker.userDetails.username}</TableCell>
+                <TableCell>{worker.userDetails.email}</TableCell>
+                <TableCell>{worker.services.join(", ")}</TableCell>
+                <TableCell>{worker.ratings}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
