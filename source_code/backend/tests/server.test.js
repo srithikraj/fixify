@@ -12,17 +12,21 @@ beforeAll(async () => {
 
   // Override the actual MongoDB URI with the in-memory server URI
   process.env.ATLAS_URI = mongoUri;
-
-  // Connect to the mock database
-  await connect.connectToServer();
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
   await mongoServer.stop();
 });
 
 
 test("Test connection to mock database", async () => {
-    expect(mongoose.connection.readyState).toBe(1);
+  expect(mongoose.connection.readyState).toBe(0);
+  
+  await connect.connectToServer();
+
+  expect(mongoose.connection.readyState).toBe(1);
+
+  await connect.closeConnection();
+
+  expect(mongoose.connection.readyState).toBe(0);
 });

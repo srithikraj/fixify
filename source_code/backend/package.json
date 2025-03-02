@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node server.js",
-    "test": "jest --runInBand --forceExit"
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
