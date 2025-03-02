@@ -29,8 +29,7 @@ const startServer = async () => {
       logger.log(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    logger.error("Failed to connect to DB!", error);
-    process.exit(1);
+    await logger.error("Failed to connect to DB!", error);
   }
 };
 
@@ -41,7 +40,6 @@ const shutdownServer = async () => {
   if (server) {
     server.close(() => {
       logger.log("Server closed.");
-      process.exit(0);
     });
   }
 };
@@ -49,4 +47,10 @@ const shutdownServer = async () => {
 process.on("SIGINT", shutdownServer);
 process.on("SIGTERM", shutdownServer);
 
-startServer();
+
+// Only start the server if NOT in a test environment
+if (process.env.NODE_ENV !== "test") {
+  startServer();
+}
+
+module.exports = { app, startServer, shutdownServer };

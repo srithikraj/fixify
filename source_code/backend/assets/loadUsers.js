@@ -1,16 +1,20 @@
-require("dotenv").config( { path: "./config.env" } )
+require("dotenv").config({ path: "./config.env" });
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+async function connectToDatabase() {
+    try {
+        await mongoose.connect(process.env.ATLAS_URI);
+        console.log("Database connection established");
+    } catch (error) {
+        console.error("Error connecting to the database:", error);
+        throw error;
+    }
+}
 
 async function insertAdminUser() {
-
     try {
-        await mongoose.connect(process.env.ATLAS_URI, clientOptions);
-        console.log("Database connection established");
-
         const hashedPassword = await bcrypt.hash("admin", 10);
 
         const adminUser = new User({
@@ -35,9 +39,20 @@ async function insertAdminUser() {
         console.log("Admin user inserted successfully");
     } catch (error) {
         console.error("Error inserting admin user:", error);
-    } finally {
-        await mongoose.disconnect();
+        throw error;
     }
 }
 
-insertAdminUser();
+// async function main() {
+//     try {
+//         await connectToDatabase();
+//         await insertAdminUser();
+//     } finally {
+//         await mongoose.disconnect();
+//     }
+// }
+
+// main();
+
+exports.connectToDatabase = connectToDatabase;
+exports.insertAdminUser = insertAdminUser;
