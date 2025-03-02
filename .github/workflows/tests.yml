@@ -24,7 +24,17 @@ jobs:
         with:
           node-version: 18
 
+      # run ./setup.sh to install dependencies
       - name: Install dependencies
-        run: npm install
-        working-directory: source_code/frontend
+        run: ./setup.sh
+        working-directory: ./
+
+
+      # - name: Run frontend tests
+      #   run: npm test
+      #   working-directory: source_code/frontend
+      
+      - name: Run backend tests
+        run: npm test
+        working-directory: source_code/backend
         
