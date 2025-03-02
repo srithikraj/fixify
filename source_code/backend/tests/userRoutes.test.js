@@ -7,6 +7,9 @@ const loadUsers = require("../assets/loadUsers");
 let mongoServer;
 
 beforeAll(async () => {
+    // Override the JWT_SECRET environment variable for testing (to avoid using the actual secret)
+    process.env.JWT_SECRET = "4yJv9kL8s5d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7";
+
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
