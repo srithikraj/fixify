@@ -7,7 +7,7 @@ source setup.sh
 
 # Start backend server
 cd source_code/backend
-node server.js &
+npm start &
 
 # Start frontend app
 cd ../frontend
