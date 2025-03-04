@@ -1,50 +1,69 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Avatar, Checkbox, FormControlLabel, Paper, Typography, TextField, Button, Grid } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { useNavigate } from 'react-router-dom';
-import { verifyUser } from '../api/userApi'
+import { verifyUser } from "../api/userApi";
 import axios from "axios";
 
-
 const LoginPage = () => {
-
   const navigate = useNavigate();
   const { isAuthenticated, login } = useContext(AuthContext);
 
   const [user, setUser] = useState({
     username: "",
-    password: ""
-  })
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/")
+      navigate("/");
     }
-  }, [isAuthenticated, navigate])
+  }, [isAuthenticated, navigate]);
 
-  function handleChange(e) {
-    setUser({ ...user, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    console.log(user)
-    let response = await verifyUser(user)
-    if (response.success) {
-      sessionStorage.setItem("token", response.token)
-      axios.defaults.headers.common["Authorization"] = `Bearer ${response.token}`
-      login(response.token, response.user);
-      console.log(response)
-      navigate("/")
-    } else {
-      alert(response.message)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const response = await verifyUser(user);
+      console.log("Login response:", response);
+
+      if (response.success) {
+        sessionStorage.setItem("token", response.token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.token}`;
+        login(response.token, response.user);
+        navigate("/");
+      } else {
+        setError(response.message); // e.g., "User not found" or "Incorrect password"
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      const responseData = error.response?.data;
+      if (error.response?.status === 403 && responseData?.message.includes("not verified")) {
+        setError("Your email is not verified. A new OTP has been sent. Redirecting...");
+        const { userId } = responseData;
+        setTimeout(() => {
+          navigate("/verify-customer", {
+            state: { userId, email: user.username }, // Assuming username is email
+          });
+        }, 4000);
+      } else {
+        setError(responseData?.message || "Login failed. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-
-  }
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -55,7 +74,6 @@ const LoginPage = () => {
         sm={6}
         md={6}
         sx={{
-          // backgroundImage: "linear-gradient(to right, #1e3c72, #2a5298)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -110,27 +128,44 @@ const LoginPage = () => {
             >
               Login to Your Account
             </Typography>
+            {error && (
+              <Typography color="error" sx={{ mt: 2, textAlign: "center" }}>
+                {error}
+              </Typography>
+            )}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
               <TextField
                 placeholder="Enter username"
                 onChange={handleChange}
                 name="username"
-                fullWidth required autoFocus
-                sx={{ mb: 2 }}>
-              </TextField>
+                value={user.username}
+                fullWidth
+                required
+                autoFocus
+                sx={{ mb: 2 }}
+              />
               <TextField
                 placeholder="Enter password"
                 name="password"
                 onChange={handleChange}
-                fullWidth required autoFocus
-                type="password">
-              </TextField>
+                value={user.password}
+                fullWidth
+                required
+                type="password"
+                sx={{ mb: 2 }}
+              />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: "#ef4444", color: "white" }}>
-                Login
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={isSubmitting}
+                sx={{ mt: 3, mb: 2, backgroundColor: "#ef4444", "&:hover": { backgroundColor: "#c62828" } }}
+              >
+                {isSubmitting ? "Signing In..." : "Login"}
               </Button>
             </Box>
           </Box>
