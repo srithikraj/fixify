@@ -10,6 +10,7 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
     role: { type: String, enum: ["consumer", "provider", "admin"], required: true },
+    isVerified: { type: Boolean, default: false },
     address: {
         line1: { type: String, required: true },
         line2: { type: String }, // Optional
