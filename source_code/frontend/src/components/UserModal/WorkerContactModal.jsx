@@ -148,7 +148,7 @@ const WorkerContactModal = ({ open, handleClose, worker }) => {
     return tags;
   }, []) || [];
 
-  // Remove duplicates and limit to unique tags
+  // Removing duplicates and limit to unique tags
   const uniqueTags = [...new Set(reviewTags)].slice(0, 4); // Limit to 4 tags for layout
 
   return (
