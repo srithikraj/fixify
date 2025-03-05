@@ -1,3 +1,4 @@
+import React from 'react'; 
 import { useState } from "react";
 import { 
   Box, Typography, Grid, Paper, Toolbar, Card, CardContent 
@@ -98,7 +99,7 @@ const AdminDashboard = () => {
             <Paper sx={{ p: 3, borderRadius: 3, boxShadow: 3 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>Website Analytics</Typography>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={userData}>
+                <BarChart data={userData} data-testid="recharts-bar-chart">
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
