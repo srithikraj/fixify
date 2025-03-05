@@ -21,7 +21,8 @@ export default function SignupCustomer() {
     last_name: "",
     email: "",
     phone: "",
-    role: "admin",
+    role: "consumer",
+    isVerified: false,
     address: {
       line1: "",
       line2: "",
@@ -82,8 +83,9 @@ export default function SignupCustomer() {
 
     try {
       const response = await axios.post("http://localhost:3000/signup", formData);
+      const { userId } = response.data;
       console.log("User registered:", response.data);
-      navigate("/verify-customer");
+      navigate("/verify-customer", { state: { userId, email: formData.email } });
     } catch (error) {
       console.error("Signup error:", error.response?.data || error);
       alert(error.response?.data?.message || "Signup failed.");
