@@ -25,6 +25,7 @@ async function insertAdminUser() {
             first_name: "admin_fn",
             last_name: "admin_ln",
             role: "admin",
+            isVerified: true,
             address: {
                 line1: "-",
                 postal_code: "-",

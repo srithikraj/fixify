@@ -94,10 +94,10 @@ const createTransporter = () => {
         },
     });
 
-    // Verify transporter configuration
     transporter.verify((error, success) => {
         if (error) {
-            console.error("Transporter verification failed:", error);
+            console.error("Transporter verification failed with error:", error.message);
+            throw error; // Throw the error to catch it below
         } else {
             console.log("Email transporter configured successfully");
         }
@@ -106,12 +106,12 @@ const createTransporter = () => {
     return transporter;
 };
 
-// Initialize transporter
 let transporter;
 try {
     transporter = createTransporter();
 } catch (error) {
-    console.error("Failed to initialize email transporter:", error);
+    console.error("Failed to initialize email transporter with error:", error.message);
+    // Don't set transporter, let it remain undefined
 }
 
 async function sendOTP(email, userId) {
