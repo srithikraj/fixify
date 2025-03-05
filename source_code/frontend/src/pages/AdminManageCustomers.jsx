@@ -3,7 +3,7 @@ import {
   Box, Typography, Table, TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, Button, TextField 
 } from "@mui/material";
-import CustomerUpdateModal from "../components/customerModal/CustomerUpdateModal";
+import CustomerUpdateModal from "../components/UserModal/CustomerUpdateModal";
 
 const customers = [
   { name: "Emma Wilson", email: "emma@example.com", bookings: 5 },
