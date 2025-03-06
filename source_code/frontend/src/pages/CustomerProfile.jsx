@@ -53,7 +53,7 @@ const CustomerProfile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.put("http://localhost:3000/users/update", { 
+      const response = await axios.put("https://fixifyawsamplify-production.up.railway.app/users/update", { 
         username: user.username, 
         ...formData 
       });
