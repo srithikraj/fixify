@@ -2,7 +2,7 @@ import React from 'react';
 import Footer from '../components/Footer/footer';
 import Hero from '../components/Hero/hero';
 import HowItWorks from '../components/howitworks/howworks';
-import Navbar from '../components/Navbar/Navbar';
+import Navbar from '../components/Navbar/navbar';
 import ReadyToGetStarted from '../components/getstarted/getstarted';
 import ServicesSection from '../components/serviceSection/serviceSection';
 import WorkerManagementForm from "./serviceProviderSignup";
