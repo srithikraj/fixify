@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3000"
+const URL = "fixifybackend.netlify.app"
 
 export async function getAllServices() {
     const response = await axios.get(`${URL}/services`)
