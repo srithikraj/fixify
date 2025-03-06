@@ -68,8 +68,6 @@ describe("LoginPage - User Input Tests", () => {
   });
 
 
-
-
   test("submit button is disabled during submission", async () => {
     verifyUser.mockImplementation(() => new Promise(() => {})); // Never resolves
 
