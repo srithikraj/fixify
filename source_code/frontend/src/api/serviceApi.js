@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "fixifybackend.netlify.app"
+const URL = "https://fixifyawsamplify-production.up.railway.app"
 
 export async function getAllServices() {
     const response = await axios.get(`${URL}/services`)
