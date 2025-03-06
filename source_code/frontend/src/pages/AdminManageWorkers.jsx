@@ -32,7 +32,7 @@ const ManageWorkers = () => {
 
   async function fetchData() {
     try {
-      const response = await fetch("http://localhost:3000/serviceProviders", {
+      const response = await fetch("https://fixifyawsamplify-production.up.railway.app/serviceProviders", {
         method: 'GET',
         mode: 'cors',
         headers: {
