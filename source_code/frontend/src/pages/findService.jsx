@@ -204,7 +204,7 @@
 
 // export default FindService;
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar/Navbar.jsx';
+import Navbar from '../components/Navbar/navbar.jsx';
 import WorkerContactModal from '../components/UserModal/WorkerContactModal.jsx';
 const FindService = () => {
   const profileData = [
