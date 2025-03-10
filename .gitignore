@@ -28,3 +28,15 @@ package-lock.json
 
 # ignore .env
 *.env
+
+# Virtual Environment (Python)
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore WebDriver executables 
+chromedriver.exe
+geckodriver.exe
+msedgedriver.exe
