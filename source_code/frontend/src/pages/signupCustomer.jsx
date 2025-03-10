@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../index.css";
+// import "../index.css";
 import { FcGoogle } from "react-icons/fc";
 import { FaPhone } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";

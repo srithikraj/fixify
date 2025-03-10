@@ -81,7 +81,7 @@ import { AuthProvider } from './context/AuthContext'; // Import AuthContext
 import MainLayout from './MainLayout';
 import Home from './pages/home';
 import SignupCustomer from './pages/signupCustomer';
-import Aboutus from './pages/aboutUs';
+import Aboutus from './pages/AboutUs';
 import OTPVerification from './pages/CustomerVerification';
 import LoginPage from './pages/signin';
 import ServiceProviderSignup from './pages/serviceProviderSignup';

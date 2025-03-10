@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from "../assets/logo.png"
 
-const App = () => {
+const AboutuS = () => {
   const styles = {
     body: {
       margin: 0,
@@ -187,4 +187,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AboutuS;
