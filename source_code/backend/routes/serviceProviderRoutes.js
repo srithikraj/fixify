@@ -50,7 +50,11 @@ serviceProviderRoutes.route("/serviceProviders").get(async (request, response) =
                     "services": 1,
                     "reviews_count": 1,
                     "userDetails.username": 1,
-                    "userDetails.email": 1
+                    "userDetails.email": 1,
+                    "userDetails.phone": 1,
+                    "userDetails.address": 1,
+                    "userDetails.first_name": 1,
+                    "userDetails.last_name": 1
                 }
             },
             { $skip: skip },
