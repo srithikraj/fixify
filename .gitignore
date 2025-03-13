@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# package locks files
+package-lock.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -25,3 +28,15 @@ dist-ssr
 
 # ignore .env
 *.env
+
+# Virtual Environment (Python)
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore WebDriver executables 
+chromedriver.exe
+geckodriver.exe
+msedgedriver.exe

@@ -1,0 +1,18 @@
+// {
+//     "presets": [
+//       "@babel/preset-env",
+//       "@babel/preset-react"
+//     ]
+//   }
+
+{
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "modules": "commonjs" // or "amd", "systemjs" depending on your needs
+        }
+      ],
+      "@babel/preset-react"
+    ]
+  }
