@@ -98,6 +98,7 @@ cd fixify
 - **Arshita** ([aarshita@uwaterloo.ca](mailto:aarshita@uwaterloo.ca))
 - **Bhargav Parekh** ([bnparekh@uwaterloo.ca](mailto:bnparekh@uwaterloo.ca))
 - **Raghul Chandrasekaran** ([r5chandr@uwaterloo.ca](mailto:r5chandr@uwaterloo.ca))
+- **Rajveer** ([r2jadav@uwaterloo.ca](mailto:r2jadav@uwaterloo.ca))
 
 
 ---
