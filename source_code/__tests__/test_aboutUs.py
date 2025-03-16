@@ -41,7 +41,7 @@ class TestAboutUsPage(unittest.TestCase):
         # Test LOGIN button navigation
         #login_btn.click()
         #time.sleep(2)  # Wait for redirection
-        #self.assertIn("Login", self.driver.title)
+        self.assertIn("Login", self.driver.title)
 
     def test_about_us_section(self):
         """Verify 'ABOUT US' section is present"""
