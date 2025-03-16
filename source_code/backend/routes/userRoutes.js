@@ -23,6 +23,13 @@ let userRoutes = express.Router()
  * URL: http://localhost:3000/users/login
  * Description: Verify user login info. Returns user info upon success.
 */
+
+userRoutes.route("/users").get(async (request, response) => {
+    let db = database.getDb()
+    let data = await db.collection("users").find({}).toArray()
+    response.json({ data })
+})
+
 userRoutes.route("/users/login").post(async (request, response) => {
     try {
         let db = database.getDb();
@@ -56,7 +63,7 @@ userRoutes.route("/users/login").post(async (request, response) => {
             success: true,
             message: "Login Successful!",
             token: token,
-            user: { id: user._id, username: user.username, first_name: user.first_name, last_name: user.last_name,  role: user.role, email: user.email, phone: user.phone, address: user.address },
+            user: { id: user._id, username: user.username, first_name: user.first_name, last_name: user.last_name, role: user.role, email: user.email, phone: user.phone, address: user.address },
         });
     } catch (error) {
         console.error("Error during login:", error);
