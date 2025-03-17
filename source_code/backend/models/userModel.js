@@ -15,7 +15,7 @@ const userSchema = new Schema({
         line1: { type: String, required: true },
         line2: { type: String }, // Optional
         unit_no: { type: String }, // Optional
-        city: { type: String, required: true },
+        city: { type: String },
         postal_code: { type: String, required: true },
         province: { type: String, required: true },
         country: { type: String, required: true },
