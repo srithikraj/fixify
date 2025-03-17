@@ -29,12 +29,30 @@ jobs:
         run: ./setup.sh
         working-directory: ./
 
-
-      # - name: Run frontend tests
-      #   run: npm test
-      #   working-directory: source_code/frontend
       
       - name: Run backend tests
         run: npm test
         working-directory: source_code/backend
+
+      # ----- Selenium Tests for Frontend (Python) -----
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Create and activate virtual environment and install Python dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r source_code/frontend/__tests__/requirements.txt
+        working-directory: ./
+
+      - name: Run Selenium tests for frontend
+        run: |
+          source venv/bin/activate
+          # Assuming your Selenium tests are discoverable with unittest in the specified directory:
+          python -m unittest discover -s source_code/frontend/__tests__
+        working-directory: ./
+
         
