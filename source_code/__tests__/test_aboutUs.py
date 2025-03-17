@@ -8,9 +8,13 @@ class TestAboutUsPage(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Setup WebDriver before running tests"""
-        cls.driver = webdriver.Chrome()  # Ensure chromedriver is installed
-        cls.driver.get("http://localhost:5173/aboutus")  # Update URL if needed
-        cls.driver.maximize_window()
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # Run in headless mode
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+
+        cls.driver = webdriver.Chrome(options=chrome_options)
+        cls.driver.get("http://localhost:5173/aboutus")
 
     def test_page_title(self):
         """Verify page title contains 'About Us'"""
