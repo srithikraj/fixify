@@ -45,14 +45,14 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
-          pip install -r source_code/frontend/__tests__/requirements.txt
+          pip install -r source_code/__tests__/requirements.txt
         working-directory: ./
 
       - name: Run Selenium tests for frontend
         run: |
           source venv/bin/activate
           # Assuming your Selenium tests are discoverable with unittest in the specified directory:
-          python -m unittest discover -s source_code/frontend/__tests__
+          python -m unittest discover -s source_code/__tests__
         working-directory: ./
 
         
