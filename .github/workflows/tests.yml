@@ -89,7 +89,7 @@ jobs:
       - name: Start servers (frontend & backend)
         run: |
           chmod +x setup.sh
-          ./setup.sh &
+          ./start.sh &
         working-directory: ./
 
       # Wait for the frontend to be up on port 5173 (adjust if your setup.sh uses a different port)
