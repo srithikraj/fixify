@@ -1,6 +1,7 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -15,7 +16,8 @@ class LoginPageTest(unittest.TestCase):
     def setUpClass(cls):
         """Set up WebDriver before tests (runs once for all tests)"""
         chrome_options = Options()
-        # chrome_options.add_argument("--headless")  # Run tests in headless mode
+
+        chrome_options.add_argument("--headless")  # Run tests in headless mode
         chrome_options.add_argument("--window-size=1920,1080")  # Simulate real screen size
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
@@ -32,6 +34,7 @@ class LoginPageTest(unittest.TestCase):
         """Reset state before each test by reloading the login page."""
         self.driver.get("http://localhost:5173/signin")
         
+
     @classmethod
     def tearDownClass(cls):
         """Close browser after all tests"""
@@ -97,6 +100,7 @@ class LoginPageTest(unittest.TestCase):
             self.wait.until(EC.presence_of_element_located((By.XPATH, "//p[contains(text(),'Login Failed! User not found!')]")))
             error_message = self.driver.find_element(By.XPATH, "//p[contains(text(),'Login Failed! User not found!')]").text
             self.assertTrue("Login Failed! User not found!" in error_message, "Error message not displayed as expected")
+
         except TimeoutException:
             self.fail("Error message did not appear after failed login attempt")
 

@@ -14,7 +14,6 @@ driver.maximize_window()
 # Explicit wait
 wait = WebDriverWait(driver, 15)  # Increased wait time to 15 seconds
 
-
 # TEST 1: Verify Page Title
 def test_page_load():
     try:
