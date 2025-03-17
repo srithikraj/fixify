@@ -14,6 +14,9 @@ class ContactUsPageTest(unittest.TestCase):
     def setUpClass(cls):
         """Set up WebDriver before tests (runs once for all tests)"""
         chrome_options = Options()
+
+        chrome_options.add_argument("--headless")  # Run tests in headless mode
+
         chrome_options.add_argument("--window-size=1920,1080")  # Simulate real screen size
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
@@ -22,7 +25,8 @@ class ContactUsPageTest(unittest.TestCase):
             service = Service(ChromeDriverManager().install())
             cls.driver = webdriver.Chrome(service=service, options=chrome_options)
             cls.driver.get("http://localhost:5173/contactus")  # Ensure your local server is running
-            cls.wait = WebDriverWait(cls.driver, 5)  # Increased wait time for elements
+
+            cls.wait = WebDriverWait(cls.driver, 10)  # Increased wait time for elements
         except WebDriverException as e:
             print("Error setting up WebDriver:", str(e))
             raise
