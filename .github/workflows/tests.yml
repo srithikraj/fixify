@@ -1,3 +1,60 @@
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+        
+#       - name: Verify repo structure
+#         run: ls -R 
+        
+#       - name: Set up Node.js (for frontend projects)
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+
+#       # run ./setup.sh to install dependencies
+#       - name: Install dependencies
+#         run: ./setup.sh
+#         working-directory: ./
+
+      
+#       - name: Run backend tests
+#         run: npm test
+#         working-directory: source_code/backend
+
+#       # ----- Selenium Tests for Frontend (Python) -----
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.x'
+      
+#       - name: Create and activate virtual environment and install Python dependencies
+#         run: |
+#           python -m venv venv
+#           source venv/bin/activate
+#           pip install --upgrade pip
+#           pip install -r source_code/__tests__/requirements.txt
+#         working-directory: ./
+
+#       - name: Run Selenium tests for frontend
+#         run: |
+#           source venv/bin/activate
+#           # Assuming your Selenium tests are discoverable with unittest in the specified directory:
+#           python -m unittest discover -s source_code/__tests__
+#         working-directory: ./
+
 name: CI/CD Pipeline
 
 on:
@@ -17,19 +74,30 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Verify repo structure
-        run: ls -R 
-        
+        run: ls -R
+
       - name: Set up Node.js (for frontend projects)
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # run ./setup.sh to install dependencies
-      - name: Install dependencies
-        run: ./setup.sh
+      # If you need 'wait-on' and it's not already installed in setup.sh:
+      - name: Install wait-on globally
+        run: npm install -g wait-on
+
+      # Make setup.sh executable, then run it in the background
+      - name: Start servers (frontend & backend)
+        run: |
+          chmod +x setup.sh
+          ./setup.sh &
         working-directory: ./
 
-      
+      # Wait for the frontend to be up on port 5173 (adjust if your setup.sh uses a different port)
+      - name: Wait for frontend
+        run: npx wait-on http://localhost:5173
+        working-directory: ./
+
+      # (Optional) Run backend tests if you want them AFTER servers start
       - name: Run backend tests
         run: npm test
         working-directory: source_code/backend
@@ -51,8 +119,6 @@ jobs:
       - name: Run Selenium tests for frontend
         run: |
           source venv/bin/activate
-          # Assuming your Selenium tests are discoverable with unittest in the specified directory:
           python -m unittest discover -s source_code/__tests__
         working-directory: ./
 
-        
