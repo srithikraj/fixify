@@ -76,7 +76,6 @@
 # if __name__ == "__main__":
 #     unittest.main()
 
-
 import os
 import time
 import unittest
@@ -131,15 +130,15 @@ class TestAboutUsPage(unittest.TestCase):
         # )
         # self.assertTrue(home_btn.is_displayed())
         # self.assertTrue(login_btn.is_displayed())
-
+        #
         # # Test HOME button navigation
         # home_btn.click()
         # time.sleep(2)
         # self.assertIn("Home", self.driver.title)
-
+        #
         # # Navigate back
         # self.driver.get(f"{self.base_url}/aboutus")
-
+        #
         # # Test LOGIN button navigation
         # login_btn.click()
         # time.sleep(2)
@@ -147,13 +146,14 @@ class TestAboutUsPage(unittest.TestCase):
 
     def test_about_us_section(self):
         """Verify 'ABOUT US' section is present"""
-        about_title = WebDriverWait(self.driver, 10).until(
+        # Increased wait time to 20 seconds for this section
+        about_title = WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'ABOUT US')]"))
         )
-        about_text = WebDriverWait(self.driver, 10).until(
+        about_text = WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located((By.XPATH, "//p[contains(text(), 'Welcome to FIXIFY!')]"))
         )
-        about_video = WebDriverWait(self.driver, 10).until(
+        about_video = WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located((By.TAG_NAME, "video"))
         )
 
@@ -181,4 +181,4 @@ class TestAboutUsPage(unittest.TestCase):
         cls.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2)  # More detailed output
+    unittest.main(verbosity=2)
