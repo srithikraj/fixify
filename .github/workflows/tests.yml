@@ -103,7 +103,7 @@ jobs:
       - name: Start frontend
         run:
           npm ci
-          npm run dev -- --host &
+          nohup npm run dev -- --host > frontend.log 2>&1 &
         working-directory: source_code/frontend  # Adjust path to your React app
         env:
           CI: true  # Prevents React from hanging in CI
