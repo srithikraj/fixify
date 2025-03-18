@@ -103,19 +103,13 @@ jobs:
       - name: Start frontend
         run:
           npm ci
-          nohup npm run dev -- --host > frontend.log 2>&1 &
+          npm run dev -- --host &
+          sleep 30  # Wait for the server to start
+          curl --retry 10 --retry-delay 5 http://localhost:5173 || exit 1
         working-directory: source_code/frontend  # Adjust path to your React app
         env:
           CI: true  # Prevents React from hanging in CI
 
-      # Wait for services to be ready
-      - name: Wait for backend and frontend
-        run: |
-          sleep 30  # Give time for services to start (adjust as needed)
-          curl --retry 10 --retry-delay 5 http://localhost:5173 || exit 1  # Adjust frontend port
-          curl --retry 10 --retry-delay 5 http://localhost:3000 || exit 1  # Adjust backend port
-          curl http://localhost:5173/aboutus > frontend_content.html || echo "Failed to fetch frontend content"
-          cat frontend_content.html || echo "No content to display"
 
       # Run backend tests
       - name: Run backend tests
