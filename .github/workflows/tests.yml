@@ -117,7 +117,7 @@ jobs:
       # Wait for services to be ready
       - name: Wait for backend and frontend
         run: |
-          sleep 10  # Give time for services to start (adjust as needed)
+          sleep 20  # Give time for services to start (adjust as needed)
           curl --retry 10 --retry-delay 5 http://localhost:5173 || exit 1  # Adjust frontend port
           curl --retry 10 --retry-delay 5 http://localhost:3000 || exit 1  # Adjust backend port
 
