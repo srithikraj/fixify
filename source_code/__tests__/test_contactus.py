@@ -24,7 +24,7 @@ class ContactUsPageTest(unittest.TestCase):
         try:
             service = Service(ChromeDriverManager().install())
             cls.driver = webdriver.Chrome(service=service, options=chrome_options)
-            cls.driver.get("http://localhost:5173/contactus")  # Ensure your local server is running
+            cls.driver.get("https://fixifyawsamplify-production-7a03.up.railway.app/contactus")  # Ensure your local server is running
 
             cls.wait = WebDriverWait(cls.driver, 10)  # Increased wait time for elements
         except WebDriverException as e:

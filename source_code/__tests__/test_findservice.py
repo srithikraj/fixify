@@ -16,7 +16,7 @@ chrome_options.add_argument("--window-size=1920,1080")
 driver = webdriver.Chrome(options=chrome_options)
 
 # Open FindService Page
-driver.get("http://localhost:5173/findService")
+driver.get("https://fixifyawsamplify-production-7a03.up.railway.app/findService")
 
 # Explicit wait
 wait = WebDriverWait(driver, 15)

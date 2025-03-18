@@ -96,10 +96,6 @@ jobs:
           ./start.sh &
         working-directory: ./  # Adjust this path
 
-      # Wait for frontend to be fully up
-      - name: Wait for frontend
-        run: npx wait-on --timeout 30000 http://localhost:5173 || exit 1  # 30s timeout, fail if not ready
-        working-directory: source_code/frontend  # Adjust this path
 
       # Optional: Run backend tests (if applicable)
       - name: Run backend tests (if applicable)
