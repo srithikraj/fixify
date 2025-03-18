@@ -109,7 +109,9 @@ jobs:
 
       # Start the frontend (in the background)
       - name: Start frontend
-        run: npm run dev &
+        run:
+          npm install -g serve 
+          npm run build
         working-directory: source_code/frontend  # Adjust path to your React app
         env:
           CI: true  # Prevents React from hanging in CI
