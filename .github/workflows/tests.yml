@@ -84,29 +84,24 @@ jobs:
       - name: Install wait-on globally
         run: npm install -g wait-on
 
-      # Install frontend dependencies (if needed)
+      # Install frontend dependencies in the correct directory
       - name: Install frontend dependencies
         run: npm install
-        working-directory: ./
+        working-directory: source_code/frontend  # Adjust this path
 
       # Start servers with proper script name
       - name: Start servers (frontend & backend)
         run: |
-          chmod +x start.sh
-          ./start.sh &
-        working-directory: ./
+          chmod +x setup.sh
+          ./setup.sh &
+        working-directory: source_code/frontend  # Adjust this path
 
       # Wait for frontend to be fully up
       - name: Wait for frontend
         run: npx wait-on --timeout 30000 http://localhost:5173 || exit 1  # 30s timeout, fail if not ready
-        working-directory: ./
+        working-directory: source_code/frontend  # Adjust this path
 
-      # Optional: Verify backend (if applicable)
-      # - name: Wait for backend
-      #   run: npx wait-on --timeout 30000 http://localhost:5000 || exit 1  # Adjust port if needed
-      #   working-directory: ./
-
-      # Optional: Run backend tests (only if they exist)
+      # Optional: Run backend tests (if applicable)
       - name: Run backend tests (if applicable)
         run: npm test || echo "No backend tests found, skipping..."
         working-directory: source_code/backend
@@ -115,7 +110,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'  # Match your local environment
+          python-version: '3.13'
 
       - name: Create and activate virtual environment and install Python dependencies
         run: |
