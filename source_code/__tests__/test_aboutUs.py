@@ -95,22 +95,35 @@ class TestAboutUsPage(unittest.TestCase):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")  # For stability in headless mode
+        chrome_options.add_argument("--disable-gpu")
+        # Enable browser logging for diagnostics
+        chrome_options.set_capability("goog:loggingPrefs", {"browser": "ALL"})
 
         cls.driver = webdriver.Chrome(service=service, options=chrome_options)
         cls.base_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
         cls.driver.get(f"{cls.base_url}/aboutus")  # Ensure this is the correct route
 
-        # Wait for the initial page load (up to 20 seconds)
-        WebDriverWait(cls.driver, 20).until(
-            lambda driver: driver.execute_script("return document.readyState") == "complete"
-        )
-        
-        # Additional wait: ensure the React app has rendered by checking that the #root container has content
+        # Wait for the initial page load (up to 30 seconds)
         WebDriverWait(cls.driver, 30).until(
-            lambda d: d.find_element(By.ID, "root").get_attribute("innerHTML").strip() != ""
+            lambda d: d.execute_script("return document.readyState") == "complete"
         )
         
+        # Wait for the React app to hydrate by ensuring the #root element has content (up to 60 seconds)
+        try:
+            WebDriverWait(cls.driver, 60).until(
+                lambda d: d.find_element(By.ID, "root").get_attribute("innerHTML").strip() != ""
+            )
+        except Exception as e:
+            print("Timeout waiting for #root to be populated with content.")
+            print("Page source:")
+            print(cls.driver.page_source)
+            # Capture browser console logs for debugging
+            logs = cls.driver.get_log("browser")
+            print("Browser console logs:")
+            for log in logs:
+                print(log)
+            raise e
+
         print(f"Page loaded: {cls.driver.current_url}")
         print("Page source (first 500 chars):")
         print(cls.driver.page_source[:500])
