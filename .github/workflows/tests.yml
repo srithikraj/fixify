@@ -53,7 +53,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+        ATLAS_URI: mongodb+srv://fixifydev:46SgruY75iezyd9o@fixifycluster0.f0fkl.mongodb.net/fixifydev retryWrites=true&w=majority&appName=FixifyCluster0
+        JWT_SECRET: 3yJv9kL8s5d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
