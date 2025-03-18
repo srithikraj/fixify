@@ -75,12 +75,6 @@ jobs:
         with:
           python-version: '3.13.2'  # Adjust version as needed
 
-      # Install MongoDB (for backend)
-      - name: Install MongoDB
-        uses: supercharge/mongodb-github-action@1.8.0
-        with:
-          mongodb-version: '8.0'  # Adjust version to match your backend
-
       # Install project dependencies
       - name: Install backend and frontend dependencies
         run: ./setup.sh
@@ -104,15 +98,12 @@ jobs:
       - name: Start backend
         run: npm start &
         working-directory: source_code/backend
-        env:
-          MONGODB_URI: mongodb://localhost:3000/fixify  # Adjust URI as needed
 
       # Start the frontend (in the background)
       - name: Start frontend
         run:
-          npm install -g serve 
-          npm run build
-          serve -s dist -l 5173 &
+          npm ci
+          npm run dev -- --host &
         working-directory: source_code/frontend  # Adjust path to your React app
         env:
           CI: true  # Prevents React from hanging in CI
