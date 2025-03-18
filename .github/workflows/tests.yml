@@ -90,7 +90,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install selenium pytest webdriver-manager
+          pip install selenium unittest webdriver-manager
         working-directory: ./source_code/__tests__  # Adjust path to your test folder
 
       # Install Chrome and ChromeDriver for Selenium
@@ -133,5 +133,5 @@ jobs:
 
       # Run frontend Selenium tests
       - name: Run frontend Selenium tests
-        run: pytest test_aboutUs.py  # Adjust to your test file name
+        run: python -m unittest test_aboutUs.py  # Adjust to your test file name
         working-directory: source_code/__tests__  # Adjust path to your test folder
