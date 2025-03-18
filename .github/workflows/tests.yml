@@ -92,9 +92,9 @@ jobs:
       # Start servers with proper script name
       - name: Start servers (frontend & backend)
         run: |
-          chmod +x setup.sh
-          ./setup.sh &
-        working-directory: source_code/frontend  # Adjust this path
+          chmod +x start.sh
+          ./start.sh &
+        working-directory: ./  # Adjust this path
 
       # Wait for frontend to be fully up
       - name: Wait for frontend
