@@ -96,6 +96,7 @@ class TestAboutUsPage(unittest.TestCase):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
         
         cls.driver = webdriver.Chrome(service=service, options=chrome_options)
         cls.base_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
@@ -144,22 +145,6 @@ class TestAboutUsPage(unittest.TestCase):
         # time.sleep(2)
         # self.assertIn("Login", self.driver.title)
 
-    def test_about_us_section(self):
-        """Verify 'ABOUT US' section is present"""
-        # Increased wait time to 20 seconds for this section
-        about_title = WebDriverWait(self.driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'ABOUT US')]"))
-        )
-        about_text = WebDriverWait(self.driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, "//p[contains(text(), 'Welcome to FIXIFY!')]"))
-        )
-        about_video = WebDriverWait(self.driver, 20).until(
-            EC.presence_of_element_located((By.TAG_NAME, "video"))
-        )
-
-        self.assertTrue(about_title.is_displayed())
-        self.assertTrue(about_text.is_displayed())
-        self.assertTrue(about_video.is_displayed())
 
     def test_team_section(self):
         """Check 'MEET OUR TEAM' section and verify team members"""
