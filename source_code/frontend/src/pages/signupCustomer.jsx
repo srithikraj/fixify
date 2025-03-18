@@ -4,15 +4,11 @@ import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { FaPhone } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import Divider from '@mui/material/Divider';
+
 
 export default function SignupCustomer() {
   const navigate = useNavigate();
-
-  const provinces = [
-    "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador",
-    "Nova Scotia", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan",
-    "Northwest Territories", "Nunavut", "Yukon",
-  ];
 
   const [formData, setFormData] = useState({
     // username: "",
@@ -28,6 +24,7 @@ export default function SignupCustomer() {
       line2: "",
       unit_no: "",
       postal_code: "",
+      city: "",
       province: "",
       country: "Canada",
       longitude: "43.516788",
@@ -41,7 +38,7 @@ export default function SignupCustomer() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (["line1", "line2", "unit_no", "postal_code", "province"].includes(name)) {
+    if (["line1", "line2", "unit_no", "postal_code", "city", "province"].includes(name)) {
       setFormData({
         ...formData,
         address: {
@@ -173,24 +170,6 @@ export default function SignupCustomer() {
         <p style={{ marginBottom: "1rem", color: "black" }}>-OR-</p>
 
         <form style={{ width: "100%", maxWidth: "20rem" }} onSubmit={handleSubmit}>
-          {/* <div style={{ marginBottom: "1rem" }}>
-            <input
-              type="text"
-              placeholder="Username"
-              onChange={handleChange}
-              name="username"
-              value={formData.username}
-              style={{
-                width: "100%",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                border: "1px solid #d1d5db",
-                color: "black",
-                outline: "none",
-              }}
-            />
-            {errors.username && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.username}</span>}
-          </div> */}
 
           <div style={{ marginBottom: "1rem", display: "flex", gap: "3rem" }}>
             <div style={{ flex: 1 }}>
@@ -294,12 +273,13 @@ export default function SignupCustomer() {
               }}
             />
             {errors.phone && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.phone}</span>}
-          </div>
+            <Divider component="li" />
 
+          </div>
           <div style={{ marginBottom: "1rem" }}>
             <input
               type="text"
-              placeholder="Address Line 1"
+              placeholder="123 Main St"
               onChange={handleChange}
               name="line1"
               value={formData.address.line1}
@@ -314,45 +294,26 @@ export default function SignupCustomer() {
             />
             {errors.line1 && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.line1}</span>}
           </div>
-
-          <div style={{ marginBottom: "1rem" }}>
-            <input
-              type="text"
-              placeholder="Address Line 2 (optional)"
-              onChange={handleChange}
-              name="line2"
-              value={formData.address.line2}
-              style={{
-                width: "100%",
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                border: "1px solid #d1d5db",
-                color: "black",
-                outline: "none",
-              }}
-            />
-          </div>
-
           <div style={{ marginBottom: "1rem", display: "flex", gap: "3rem" }}>
-            <div style={{ flex: 1 }}>
-              <input
-                type="text"
-                placeholder="Postal Code (e.g., A1A 1A1)"
-                onChange={handleChange}
-                name="postal_code"
-                value={formData.address.postal_code}
-                style={{
-                  width: "100%",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.5rem",
-                  border: "1px solid #d1d5db",
-                  color: "black",
-                  outline: "none",
-                }}
-              />
-              {errors.postal_code && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.postal_code}</span>}
-            </div>
-            <div style={{ flex: 1 }}>
+              <div style={{ flex: 1 }}>
+                <input
+                  type="text"
+                  placeholder="City"
+                  onChange={handleChange}
+                  name="city"
+                  value={formData.address.city}
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #d1d5db",
+                    color: "black",
+                    outline: "none",
+                  }}
+                />
+              </div>
+
+              <div style={{ flex: 1.5 }}>
                 <select
                   name="province"
                   onChange={handleChange}
@@ -380,6 +341,27 @@ export default function SignupCustomer() {
                   <option value="Saskatchewan">Saskatchewan</option>
                 </select>
                 {errors.province && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.province}</span>}
+            </div>
+            </div>
+
+          <div style={{ marginBottom: "1rem", display: "flex", gap: "3rem" }}>
+            <div style={{ flex: 1 }}>
+              <input
+                type="text"
+                placeholder="Postal Code (e.g., A1A 1A1)"
+                onChange={handleChange}
+                name="postal_code"
+                value={formData.address.postal_code}
+                style={{
+                  width: "100%",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.5rem",
+                  border: "1px solid #d1d5db",
+                  color: "black",
+                  outline: "none",
+                }}
+              />
+              {errors.postal_code && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.postal_code}</span>}
             </div>
 
           </div>

@@ -379,6 +379,13 @@ const FindService = () => {
           margin: 90px auto 0;
           max-width: 1200px;
         }
+          @media (max-width: 768px) {
+          .profile-container {
+            grid-template-columns: 1fr;
+            gap: 60px;
+            padding: 20px;
+          }
+        }
 
         .profile-card {
           width: 90%;
