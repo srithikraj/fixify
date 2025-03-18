@@ -101,7 +101,7 @@ jobs:
 
       # Start the frontend (in the background)
       - name: Start frontend
-        run:
+        run: |
           npm ci
           npm run dev -- --host &
           sleep 30  # Wait for the server to start
