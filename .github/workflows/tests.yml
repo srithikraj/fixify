@@ -89,7 +89,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager
-        working-directory: ./source_code/frontend/tests  # Adjust path to your test folder
+        working-directory: ./source_code/__tests__  # Adjust path to your test folder
 
       # Install Chrome and ChromeDriver for Selenium
       - name: Install Chrome and ChromeDriver
