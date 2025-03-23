@@ -10,7 +10,7 @@ const ReadyToGetStarted = () => {
   }
 
   return (
-    <Box sx={{ textAlign: "center", py: 20, backgroundColor: "#f5f5f5", borderRadius: 2, width: "100%" }}> {/* Full width section */}
+    <Box id="getstarted" sx={{ textAlign: "center", py: 20, backgroundColor: "#f5f5f5", borderRadius: 2, width: "100%" }}> {/* Full width section */}
       <Typography variant="h4" fontWeight={600} gutterBottom>
         Ready to Get Started with Fixify?
       </Typography>

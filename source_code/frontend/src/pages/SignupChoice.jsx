@@ -10,6 +10,7 @@ const SignupChoice = () => {
 
   return (
     <Box
+      id="box1"
       sx={{
         minHeight: "100vh",
         display: "flex",
@@ -21,6 +22,7 @@ const SignupChoice = () => {
     >
       {/* Go Back Button */}
       <IconButton
+        id="iconbutton"
         sx={{ position: "absolute", top: 20, left: 20, color: "#1976D2" }}
         onClick={() => navigate("/")}
       >
@@ -28,6 +30,7 @@ const SignupChoice = () => {
       </IconButton>
 
       <Box
+        id="box2"
         sx={{
           backgroundColor: "#fff",
           p: 4,
@@ -47,9 +50,10 @@ const SignupChoice = () => {
         </Typography>
 
         {/* Selection Cards */}
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 3, mt: 4 }}>
+        <Box id="selectioncard" sx={{ display: "flex", justifyContent: "center", gap: 3, mt: 4 }}>
           {/* Customer Card */}
           <Card
+            id="customercard"
             sx={{
               width: 180,
               border: selected === "customer" ? "2px solid #1976D2" : "2px solid transparent",
@@ -73,6 +77,7 @@ const SignupChoice = () => {
 
           {/* Worker Card */}
           <Card
+            id="workercard"
             sx={{
               width: 180,
               border: selected === "worker" ? "2px solid #E91E63" : "2px solid transparent",
@@ -97,6 +102,7 @@ const SignupChoice = () => {
 
         {/* Continue Button */}
         <Button
+          id="continuebutton"
           variant="contained"
           color="primary"
           sx={{ mt: 4, px: 4 }}

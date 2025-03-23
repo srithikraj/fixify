@@ -24,7 +24,7 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <Container sx={{ textAlign: "center", py: 15}}>
+    <Container id="howitworks" sx={{ textAlign: "center", py: 15}}>
       <Typography variant="h4" fontWeight={600} gutterBottom>
         How Fixify Works
       </Typography>

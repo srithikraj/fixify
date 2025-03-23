@@ -86,7 +86,7 @@ const footerData = [
 
 const Footer = () => {
   return (
-    <Box sx={{ backgroundColor: "#455a64", color: "white", py: 6 }}>
+    <Box id="footer_code" sx={{ backgroundColor: "#455a64", color: "white", py: 6 }}>
       <Container>
         <Grid container spacing={4} justifyContent="space-between">
           {footerData.map((section, index) => (

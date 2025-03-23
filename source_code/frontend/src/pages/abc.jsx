@@ -2,50 +2,24 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar/Navbar.jsx';
 import WorkerContactModal from '../components/UserModal/WorkerContactModal.jsx';
 
-const Navbar2 = ({ onSort }) => {
+const Navbar2 = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   const toggleDropdown = (menu) => {
     setActiveDropdown(activeDropdown === menu ? null : menu);
   };
 
-  const handleSort = (category, order) => {
-    onSort(category, order);
-    setActiveDropdown(null);  // Close the dropdown after selection
-  };
-
-  const handleFilter = (skills) => {
-    onFilter(skills);  // Trigger filter
-    setActiveDropdown(null);  // Close the dropdown after selection
-  };
-
   return (
     <div className="navbar2">
       {/* Rating Dropdown */}
-      {/* Services Dropdown */}
-      <div className="dropdown">
-        <button className="nav-btn" onClick={() => toggleDropdown('skills')}>
-          Skills ▼
-        </button>
-        {activeDropdown === 'skills' && (
-          <div className="dropdown-list">
-            <button onClick={() => handleFilter('Electrician')}>Electrician</button>
-            <button onClick={() => handleFilter('Plumber')}>Plumber</button>
-            <button onClick={() => handleFilter('Carpenter')}>Carpenter</button>
-            <button onClick={() => handleFilter('Painter')}>Painter</button>
-            <button onClick={() => handleFilter('Construction')}>Construction</button>
-          </div>
-        )}
-      </div>
-
       <div className="dropdown">
         <button className="nav-btn" onClick={() => toggleDropdown('rating')}>
           Rating ▼
         </button>
         {activeDropdown === 'rating' && (
           <div className="dropdown-list">
-            <button onClick={() => handleSort('rating', 'asc')}>Low to High</button>
-            <button onClick={() => handleSort('rating', 'desc')}>High to Low</button>
+            <button>Low to High</button>
+            <button>High to Low</button>
           </div>
         )}
       </div>
@@ -57,8 +31,8 @@ const Navbar2 = ({ onSort }) => {
         </button>
         {activeDropdown === 'price' && (
           <div className="dropdown-list">
-            <button onClick={() => handleSort('price', 'asc')}>Low to High</button>
-            <button onClick={() => handleSort('price', 'desc')}>High to Low</button>
+            <button>Low to High</button>
+            <button>High to Low</button>
           </div>
         )}
       </div>
@@ -70,14 +44,15 @@ const Navbar2 = ({ onSort }) => {
         </button>
         {activeDropdown === 'location' && (
           <div className="dropdown-list">
-            <button onClick={() => handleSort('location', 'nearest')}>Nearest</button>
-            <button onClick={() => handleSort('location', 'farthest')}>Farthest</button>
+            <button>Nearest</button>
+            <button>Farthest</button>
           </div>
         )}
       </div>
     </div>
   );
 };
+
 
 const FindService = () => {
   const profileData = [
@@ -173,8 +148,6 @@ const FindService = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
-  const [sortedProfiles, setSortedProfiles] = useState(profileData);
-  const [filteredProfiles, setFilteredProfiles] = useState(profileData);
 
   const handleContactClick = (worker) => {
     setSelectedWorker(worker);
@@ -186,52 +159,13 @@ const FindService = () => {
     setSelectedWorker(null);
   };
 
-  const filterProfiles = (skills) => {
-    const filteredData = profileData.filter(profile =>{
-      const profileSkills = profile.skills.toLowerCase();
-      return profileSkills.includes(skills.toLowerCase());
-    }
-    );
-    setFilteredProfiles(filteredData);
-    
-    setSortedProfiles(filteredData);  // Ensure sorted profiles reflect the filtered data
-
-  };
-
-  
-
-  const sortProfiles = (category, order) => {
-    let sortedData = [...filteredProfiles];  // Sort filteredProfiles, not profileData
-
-    if (category === 'rating') {
-      sortedData.sort((a, b) => order === 'asc' ? a.rating - b.rating : b.rating - a.rating);
-    } else if (category === 'price') {
-      sortedData.sort((a, b) => {
-        const priceA = parseFloat(a.rate.replace('$', '').replace('/Hour', ''));
-        const priceB = parseFloat(b.rate.replace('$', '').replace('/Hour', ''));
-        return order === 'asc' ? priceA - priceB : priceB - priceA;
-      });
-    } else if (category === 'location') {
-      // Assuming a simple location sorting based on alphabetical order
-      sortedData.sort((a, b) => {
-        if (order === 'nearest') {
-          return a.location.localeCompare(b.location);
-        } else {
-          return b.location.localeCompare(a.location);
-        }
-      });
-    }
-    setSortedProfiles(sortedData);
-    setFilteredProfiles(sortedData);  // Update filteredProfiles after sorting
-
-  };
-
   return (
     <div>
       <Navbar />
-      <Navbar2 onFilter={filterProfiles} onSort={sortProfiles} />
+      <Navbar2 /> {/* New Navbar2 component */}
+
       <div className="profile-container">
-        {sortedProfiles.map((profile) => (
+        {profileData.map((profile) => (
           <div key={profile.id} className="profile-card">
             <div className="card-inner">
               {/* Front side of the card */}
@@ -269,7 +203,6 @@ const FindService = () => {
       />
 
       <style jsx>{`
-        /* Styles as before */
         body {
           margin: 0;
           padding: 0;
