@@ -60,6 +60,7 @@ export default function Navbar() {
   return (
     <>
       <AppBar
+        id="navbar"
         position="fixed"
         sx={{
           backgroundColor: "rgba(230, 233, 232, 0.7)", // Transparent

@@ -22,7 +22,7 @@ const images = [
 
 export default function Hero() {
   return (
-    <Box sx={{ width: "100%", height: "100vh", position: "relative", overflow: "hidden" }}>
+    <Box id="hero" sx={{ width: "100%", height: "100vh", position: "relative", overflow: "hidden" }}>
       {/* Image Slider */}
       <Swiper
         modules={[Autoplay]}
