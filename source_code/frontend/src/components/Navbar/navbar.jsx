@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/fixicon.png';
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useContext(AuthContext); // Get auth status
@@ -70,14 +70,15 @@ export default function Navbar() {
           color: "black",
           borderRadius: "12px", // Rounded edges
           margin: "10px", // Space around navbar
-          width: "calc(100% - 20px)", // Prevent full-width stretch
+          width: "calc(100% - 40px)", // Prevent full-width stretch
           left: "10px",
           right: "10px",
+          top: "10px"
         }}
       >
         <Toolbar>
           {/* Logo on the Left */}
-          <Box component="img" src={logo} alt="Logo" sx={{ height: 60 }} />
+          <Box component="img" src={logo} alt="Logo" sx={{ height: 45 }} />
 
           {/* Navbar Buttons (Right Side) */}
           <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>

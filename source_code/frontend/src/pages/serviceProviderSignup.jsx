@@ -191,7 +191,7 @@ const ServiceProviderSignup = () => {
   };
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: "60px", padding: "20px" }}>
+    <Container maxWidth="sm" style={{ marginTop: "100px", padding: "20px" }}>
       <Stepper activeStep={activeStep} alternativeLabel>
         <Step><StepLabel>Step 1</StepLabel></Step>
         <Step><StepLabel>Step 2</StepLabel></Step>
