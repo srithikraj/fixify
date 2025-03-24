@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo2.png';
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useContext(AuthContext); // Get auth status
@@ -70,28 +70,28 @@ export default function Navbar() {
           color: "black",
           borderRadius: "12px", // Rounded edges
           margin: "10px", // Space around navbar
-          width: "calc(100% - 20px)", // Prevent full-width stretch
+          width: "calc(100% - 40px)", // Prevent full-width stretch
           left: "10px",
           right: "10px",
         }}
       >
         <Toolbar>
           {/* Logo on the Left */}
-          <Box component="img" src={logo} alt="Logo" sx={{ height: 60 }} />
+          <Box component="img" src={logo} alt="Logo" sx={{ height: 45 }} />
 
           {/* Navbar Buttons (Right Side) */}
           <Stack direction="row" spacing={2} sx={{ marginLeft: "auto" }}>
-            <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToHome}>
+            <Button sx={{ color: "black", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToHome}>
               Home
             </Button>
 
             {/* Show Sign In and Sign Up if NOT authenticated */}
             {!isAuthenticated && (
               <>
-                <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignin}>
+                <Button sx={{ color: "black", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignin}>
                   LOGIN
                 </Button>
-                <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignup}>
+                <Button sx={{ color: "black", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToSignup}>
                   SIGNUP
                 </Button>
               </>
@@ -100,7 +100,7 @@ export default function Navbar() {
             {/* Show Profile Icon if authenticated */}
             {isAuthenticated && (
               <>
-              <Button sx={{ color: "#313131", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToServices}>
+              <Button sx={{ color: "black", fontWeight: "bold", "&:hover": { color: "#ef5350" } }} onClick={goToServices}>
               Find Services
             </Button>
 

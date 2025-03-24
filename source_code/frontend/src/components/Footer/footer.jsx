@@ -86,7 +86,7 @@ const footerData = [
 
 const Footer = () => {
   return (
-    <Box id="footer_code" sx={{ backgroundColor: "#455a64", color: "white", py: 6 }}>
+    <Box id="footer_code" sx={{ backgroundColor: "black", color: "white", py: 6 }}>
       <Container>
         <Grid container spacing={4} justifyContent="space-between">
           {footerData.map((section, index) => (
@@ -99,7 +99,7 @@ const Footer = () => {
                   <ListItem key={idx} sx={{ py: 0 }}>
                     <ListItemText
                       primary={
-                        <Link to={link.path} style={{ textDecoration: "none", color: "lightgray" }}>
+                        <Link to={link.path} style={{ textDecoration: "none", color: "white" }}>
                           {link.name}
                         </Link>
                       }

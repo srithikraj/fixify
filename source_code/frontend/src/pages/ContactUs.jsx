@@ -54,7 +54,7 @@ const ContactUs = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 10, backgroundColor: "#e3f2fd", p: 3, borderRadius: 2, boxShadow: 3 }}>
+    <Container maxWidth="md" sx={{ mt: 15, backgroundColor: "#e3f2fd", p: 3, borderRadius: 2, boxShadow: 3 }}>
 
       <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ textAlign: "center", color: "#ff5722" }}>
         Connect with Our <span style={{ color: "#4caf50" }}>Team of Experts</span>
