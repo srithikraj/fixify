@@ -1,6 +1,7 @@
 const express = require("express")
 const database = require("../connect")
 const ObjectId = require("mongodb").ObjectId
+const Review = require("../models/reviewModel")
 
 let reviewRoutes = express.Router()
 
@@ -36,6 +37,18 @@ reviewRoutes.route("/reviews/top").get(async (request, response) => {
         response.status(500).json({ message: "Error fetching top reviews", error });
     }
 });
+
+reviewRoutes.get("/reviews/worker-reviews/:workerId", async (req, res) => {
+    // console.log("Fetching reviews for worker:", req.params.workerId);
+    try {
+      const { workerId } = req.params;
+      const reviews = await Review.find({ provider: workerId });
+      res.status(200).json({ success: true, reviews });
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).json({ success: false, message: "Server error while fetching reviews" });
+    }
+  });
 
 
 //////////////////////////////////////////////////////////////////////////

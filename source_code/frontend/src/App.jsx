@@ -94,6 +94,7 @@ import SignupChoice from './pages/SignupChoice';
 import ContactUs from './pages/ContactUs';
 import CustomerProfile from './pages/CustomerProfile';
 import ProtectedRoute from './components/ProtectedRoute'; // Import Protected Route
+import WorkerProfile from './pages/WorkerProfile';
 
 const App = () => {
   return (
@@ -113,6 +114,7 @@ const App = () => {
             <Route path="contactus" element={<ContactUs />} />
             {/* <Route path="CustomerProfile" element={<CustomerProfile />} /> */}
             <Route path="/CustomerProfile" element={<ProtectedRoute><CustomerProfile /></ProtectedRoute>} />
+            <Route path="/WorkerProfile" element={<ProtectedRoute><WorkerProfile /></ProtectedRoute>} />
           </Route>
 
           {/* Admin Routes (Protected) */}

@@ -1,9 +1,12 @@
 const express = require("express")
+const mongoose = require("mongoose")
 const database = require("../connect")
 const ObjectId = require("mongodb").ObjectId
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/userModel")
+const ServiceProvider = require("../models/serviceProviderModel")
+const Service = require("../models/serviceModel")
 const { sendOTP, verifyOTP } = require("../controller/otpService");
 
 
@@ -71,42 +74,7 @@ userRoutes.route("/users/login").post(async (request, response) => {
     }
 });
 
-
-// userRoutes.post("/signup", async (req, res) => {
-//     try {
-//         const { username, password, first_name, last_name, email, phone, role, address } = req.body;
-
-//         // Check if user already exists
-//         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-//         if (existingUser) {
-//             return res.status(400).json({ message: "Username or email already exists." });
-//         }
-
-//         // Hash the password
-//         const hashedPassword = await bcrypt.hash(password, 10);
-
-//         // Create new user
-//         const newUser = new User({
-//             username,
-//             password: hashedPassword,
-//             first_name,
-//             last_name,
-//             email,
-//             phone,
-//             role,
-//             address,
-//         });
-
-//         // Save user to database
-//         await newUser.save();
-
-//         res.status(201).json({ message: "User registered successfully!", userId: newUser._id });
-//     } catch (error) {
-//         console.error("Signup Error:", error);
-//         res.status(500).json({ message: "Server error. Please try again later." });
-//     }
-// });
-
+//customer sign up  
 userRoutes.post("/signup", async (req, res) => {
     try {
         const { username, password, first_name, last_name, email, phone, role, address } = req.body;
@@ -149,6 +117,96 @@ userRoutes.post("/signup", async (req, res) => {
     }
 });
 
+
+
+// worker sign u route
+userRoutes.post("/worker-signup", async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const {
+        username,
+        password,
+        first_name,
+        last_name,
+        email,
+        phone,
+        address,
+        skills,           // an array e.g., ["Plumbing", "Electrical"]
+        hourlyRate,       // number value
+        serviceDescription,
+        schedule,         // object containing availability info
+      } = req.body;
+  
+      // Check if user already exists
+      const existingUser = await User.findOne({
+        $or: [{ username }, { email }]
+      }).session(session);
+      if (existingUser) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({ message: "Username or email already exists." });
+      }
+  
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create new user document
+      const newUser = new User({
+        username,
+        password: hashedPassword,
+        first_name,
+        last_name,
+        email,
+        phone,
+        role: "provider",
+        address,
+        isVerified: false,
+      });
+      await newUser.save({ session });
+  
+      // Create service provider document that references the new user
+      const newServiceProvider = new ServiceProvider({
+        user_id: newUser._id,
+        status: "pending", // or "verified" based on your business logic
+        availability: schedule,
+        ratings: 0,
+        reviews_count: 0,
+        // Optionally, you can also store an array of services if available
+      });
+      await newServiceProvider.save({ session });
+  
+      // Create a service document if the worker provides a service.
+      // For multiple skills, you can loop through skills to create multiple documents.
+      // Here we assume only one service is registered for simplicity.
+      const newService = new Service({
+        user_id: newUser._id,
+        type: skills,  // use the first skill or loop through skills if necessary
+        description: serviceDescription,
+        hourly_rate: hourlyRate,
+      });
+      await newService.save({ session });
+  
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+  
+      // Optionally, send an OTP to the worker's email for verification.
+      await sendOTP(email, newUser._id);
+  
+      res.status(201).json({
+        message: "Worker registered successfully! Please verify your email with OTP.",
+        userId: newUser._id,
+      });
+    } catch (error) {
+      // Abort the transaction on error
+      await session.abortTransaction();
+      session.endSession();
+      console.error("Worker Signup Error:", error);
+      res.status(500).json({ message: "Server error. Please try again later." });
+    }
+  });
+
 userRoutes.post("/send-otp", async (req, res) => {
     try {
         const { email } = req.body;
@@ -187,10 +245,69 @@ userRoutes.post("/verify-otp", async (req, res) => {
 //////////////////////////////////////////////////////////////////////////
 // Update Routes
 //////////////////////////////////////////////////////////////////////////
+userRoutes.put("/users/update", async (req, res) => {
+    try {
+      const { email, username, name, lastName, phone, addressln1, province, postalCode } = req.body;
+  
+      if (!email) {
+        return res.status(400).json({ success: false, message: "Email identifier is required." });
+      }
+  
+      const updateFields = {
+        username,
+        first_name: name,
+        last_name: lastName,
+        phone,
+        address: {
+          line1: addressln1,
+          province,
+          postal_code: postalCode,
+        },
+      };
+  
+      let db = database.getDb();
+  
+      const result = await db.collection("users").findOneAndUpdate(
+        { email },
+        { $set: updateFields },
+        { returnDocument: "after" } // <-- Important for newer driver versions
+      );
+  
+      if (!result) {
+        return res.status(404).json({ success: false, message: "User not found." });
+      }
+  
+      return res.json({ success: true, data: result.value });
+    } catch (error) {
+      console.error("Error updating customer profile:", error);
+      return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+  });
+  
+  
 
 //////////////////////////////////////////////////////////////////////////
 // Delete Routes
 //////////////////////////////////////////////////////////////////////////
+
+userRoutes.delete("/users/:id", async (req, res) => {
+    try {
+      let db = database.getDb();
+      const customerId = req.params.id;
+  
+      // Delete the customer document matching the given ID
+      const result = await db.collection("users").deleteOne({ _id: new ObjectId(customerId) });
+      
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ message: "Customer not found" });
+      }
+  
+      res.status(200).json({ message: "Customer successfully deleted" });
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });    
 
 
 //========================================================================

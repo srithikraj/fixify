@@ -1,21 +1,48 @@
 import { useEffect, useState } from "react";
 import {
-  Box, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Button, TextField
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  TextField,
 } from "@mui/material";
-import ServiceProviderUpdateModal from "../components/serviceProviderModal/ServiceProviderUpdateModal"; // Import the modal component
-// const workers = [
-//   { name: "John Doe", email: "john@example.com", service: "Plumbing", rating: 4.5 },
-//   { name: "Jane Smith", email: "jane@example.com", service: "Electrical", rating: 4.8 },
-//   { name: "Bob Johnson", email: "bob@example.com", service: "Carpentry", rating: 4.2 },
-//   { name: "Alice Brown", email: "alice@example.com", service: "Painting", rating: 4.6 },
-//   { name: "Charlie Davis", email: "charlie@example.com", service: "Gardening", rating: 4.7 }
-// ];
+import ServiceProviderUpdateModal from "../components/serviceProviderModal/ServiceProviderUpdateModal";
 
 const ManageWorkers = () => {
   const [open, setOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [workers, setWorker] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log(workers);
+
+  async function fetchData() {
+    try {
+      const response = await fetch("http://localhost:3000/serviceProviders", {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const res = await response.json();
+      setWorker(res.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   const handleOpen = (worker) => {
     setSelectedWorker(worker);
@@ -26,33 +53,35 @@ const ManageWorkers = () => {
     setOpen(false);
     setSelectedWorker(null);
   };
-  useEffect(() => {
-    fetchData()
-  }, []);
 
-  async function fetchData() {
+  // New function to handle verification
+  const handleVerify = async (workerId) => {
+    console.log("Verifying worker with ID:", workerId);
+    const id = workerId.toString();
     try {
-      const response = await fetch("http://localhost:3000/serviceProviders", {
-        method: 'GET',
-        mode: 'cors',
+      const response = await fetch(`http://localhost:3000/serviceProviders/${id}`, {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: "verified" }),
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      if (response.ok) {
+        // Optionally update the local state or refetch data to reflect the change
+        fetchData();
+      } else {
+        console.error("Error verifying worker:", response.statusText);
       }
-      const res = await response.json();
-      setWorker(res.data)
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error verifying worker:", error);
     }
-  }
-
+  };
 
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
-      <Typography variant="h4" fontWeight="bold">Manage Workers</Typography>
+      <Typography variant="h4" fontWeight="bold">
+        Manage Workers
+      </Typography>
       <TextField fullWidth label="Search workers..." sx={{ my: 2 }} />
 
       <TableContainer component={Paper}>
@@ -69,7 +98,9 @@ const ManageWorkers = () => {
           <TableBody>
             {workers.map((worker, index) => (
               <TableRow key={index}>
-                <TableCell style={{ textTransform: "capitalize" }}>{worker.userDetails.username}</TableCell>
+                <TableCell style={{ textTransform: "capitalize" }}>
+                  {worker.userDetails.username}
+                </TableCell>
                 <TableCell>{worker.userDetails.email}</TableCell>
                 <TableCell>{worker.services.join(", ")}</TableCell>
                 <TableCell>{worker.ratings}</TableCell>
@@ -82,7 +113,19 @@ const ManageWorkers = () => {
                   >
                     View
                   </Button>
-                  <Button variant="contained" color="success">Verify</Button>
+                  {worker.status === "verified" ? (
+                    <Button variant="contained" color="success" disabled>
+                      Verified
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => handleVerify(worker._id)}
+                    >
+                      Verify
+                    </Button>
+                )}
                 </TableCell>
               </TableRow>
             ))}
@@ -91,9 +134,14 @@ const ManageWorkers = () => {
       </TableContainer>
 
       {/* Worker Profile Modal */}
-      <ServiceProviderUpdateModal open={open} handleClose={handleClose} worker={selectedWorker} />
+      <ServiceProviderUpdateModal
+        open={open}
+        handleClose={handleClose}
+        worker={selectedWorker}
+      />
     </Box>
   );
 };
 
 export default ManageWorkers;
+

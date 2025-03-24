@@ -7,6 +7,7 @@ import {
   
   const CustomerUpdateModal = ({ open, handleClose, customer }) => {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    console.log("Customer:", customer);
   
     if (!customer) return null; // Prevent rendering if no customer is selected
   
@@ -14,11 +15,32 @@ import {
       setDeleteDialogOpen(true);
     };
   
-    const handleConfirmDelete = () => {
-      // Perform account deletion (API Call or State Update)
+    // const handleConfirmDelete = () => {
+    //   // Perform account deletion (API Call or State Update)
+      // setDeleteDialogOpen(false);
+      // handleClose(); // Closing both modals
+    // };
+
+  const handleDelete = async (customerId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/users/${customerId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete customer");
+      }
+      const result = await response.json();
+      console.log(result.message);
       setDeleteDialogOpen(false);
       handleClose(); // Closing both modals
-    };
+      // Optionally, notify the parent component that the customer has been deleted
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+    }
+  };
   
     return (
       <>
@@ -51,8 +73,8 @@ import {
               <TextField label="Email" fullWidth defaultValue={customer.email} />
   
               {/* Phone & Address */}
-              <TextField label="Phone" fullWidth defaultValue="+1 234-567-8901" />
-              <TextField label="Address" fullWidth defaultValue="123 Main St, New York, NY 10001" />
+              <TextField label="Phone" fullWidth defaultValue={customer.phone} />
+              <TextField label="Address" fullWidth defaultValue={customer.address.line1 + " " + customer.address.city + " " + customer.address.province + " " + customer.address.postal_code } />
     
               {/* Delete Account Section */}
               <Typography color="error">
@@ -71,19 +93,23 @@ import {
   
         {/* Delete Confirmation Dialog */}
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirm Account Deletion</DialogTitle>
-          <DialogContent>
-            <Typography>
-              Are you sure you want to delete this customer? This action cannot be undone.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-            <Button variant="contained" color="error" onClick={handleConfirmDelete}>
-              Yes, Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <DialogTitle>Confirm Account Deletion</DialogTitle>
+            <DialogContent>
+              <Typography>
+                Are you sure you want to delete this customer? This action cannot be undone.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+              <Button 
+                variant="contained" 
+                color="error" 
+                onClick={() => handleDelete(customer._id)}
+              >
+                Yes, Delete
+              </Button>
+            </DialogActions>
+      </Dialog>
       </>
     );
   };

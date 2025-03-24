@@ -4,6 +4,7 @@ const connect = require("./connect");
 const users = require("./routes/userRoutes");
 const services = require("./routes/serviceRoutes");
 const serviceProviders = require("./routes/serviceProviderRoutes");
+const dashboardStatRoute = require("./routes/dashboardStatsRoute");
 const reviews = require("./routes/reviewRoutes");
 const logger = require("./logger");
 
@@ -17,6 +18,7 @@ app.use(users);
 app.use(services);
 app.use(serviceProviders);
 app.use(reviews);
+app.use(dashboardStatRoute);
 
 let server;
 

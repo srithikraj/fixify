@@ -8,6 +8,7 @@ import { useState } from "react";
 
 const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  console.log(worker);
 
   if (!worker) return null;
 
@@ -46,16 +47,16 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
             </Box>
 
             {/* Full Name & Email */}
-            <TextField label="Full Name" fullWidth value={worker.name} />
+            <TextField label="Full Name" fullWidth value={worker.userDetails.first_name + " " + worker.userDetails.last_name} />
 
             {/* Company & Position */}
-            <TextField label="Phone" fullWidth value="(123)-345-3434" disabled />
-            <TextField label="Services Provided" fullWidth value="Plumber, Painter" disabled />
-            <TextField label="Address" fullWidth value="200 University Avenue West Waterloo, Ontario, N2L 3G1" disabled/>
+            <TextField label="Phone" fullWidth value="(123)-345-3434" />
+            <TextField label="Services Provided" fullWidth value={worker.services} />
+            <TextField label="Address" fullWidth value={worker.userDetails.address.line1 + " " + worker.userDetails.address.postal_code}/>
 
             {/* Account Details */}
             <Typography variant="h6">Account Details</Typography>
-            <TextField label="Log in email address" fullWidth value={worker.email} disabled />
+            <TextField label="Log in email address" fullWidth value={worker.userDetails.email} disabled />
             <TextField label="Password" fullWidth type="password" value="*********" />
 
             {/* Delete Account */}

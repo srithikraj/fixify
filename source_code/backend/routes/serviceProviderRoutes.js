@@ -50,7 +50,11 @@ serviceProviderRoutes.route("/serviceProviders").get(async (request, response) =
                     "services": 1,
                     "reviews_count": 1,
                     "userDetails.username": 1,
-                    "userDetails.email": 1
+                    "userDetails.email": 1,
+                    "userDetails.phone": 1,
+                    "userDetails.address": 1,
+                    "userDetails.first_name": 1,
+                    "userDetails.last_name": 1
                 }
             },
             { $skip: skip },
@@ -75,6 +79,57 @@ serviceProviderRoutes.route("/serviceProviders").get(async (request, response) =
         response.status(500).json({ message: "Internal Server Error" });
     }
 });
+
+
+// // PATCH endpoint to update a service provider's status
+// serviceProviderRoutes.put("/serviceProviders/:id", async (req, res) => {
+//     try {
+        
+//       const { status } = req.body; // expecting { status: "verified" }
+//       console.log("Received ID:", req.params.id);
+//       console.log("status", status);
+//       const updatedWorker = await serviceProvider.findByIdAndUpdate(
+//         req.params.id,
+//         { $set: { status } }, // Use $set to update only the status field
+//         { new: true } // Return the updated document
+//       );
+//       if (!updatedWorker) {
+//         return res.status(404).json({ error: "Worker not found" });
+//       }
+//       res.json({ data: updatedWorker });
+//     } catch (err) {
+//       res.status(500).json({ error: err.message });
+//     }
+//   });
+
+
+
+serviceProviderRoutes.put("/serviceProviders/:id", async (req, res) => {
+    try {
+      const { status } = req.body; // expecting { status: "verified" }
+      
+      let db = database.getDb();
+      
+      // Use updateOne to update the status field of the matching document
+      const result = await db.collection("service_providers").updateOne(
+        { _id: new ObjectId(req.params.id) },
+        { $set: { status } }
+      );
+      
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ error: "Worker not found" });
+      }
+      
+      // Optionally, retrieve the updated document
+      const updatedWorker = await db.collection("service_providers").findOne({ _id: new ObjectId(req.params.id) });
+      
+      res.json({ data: updatedWorker });
+    } catch (err) {
+      console.error("Error updating worker:", err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
 
 
 //////////////////////////////////////////////////////////////////////////

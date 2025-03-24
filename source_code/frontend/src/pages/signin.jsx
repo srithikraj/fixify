@@ -12,6 +12,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, login } = useContext(AuthContext);
 
+
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -21,7 +22,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/admin");
     }
   }, [isAuthenticated, navigate]);
 

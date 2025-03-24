@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, InputAdornment, Typography, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Box, TextField, InputAdornment, Container } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const searchSuggestions = [
@@ -14,6 +15,7 @@ export default function SearchBar() {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,14 +34,21 @@ export default function SearchBar() {
     return () => clearInterval(interval);
   }, [charIndex, currentIndex]);
 
+  // When user presses "Enter", navigate to the find service page.
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      navigate("/findService");
+    }
+  };
+
   return (
     <Container maxWidth="md" sx={{ mt: 4, textAlign: "center" }}>
-
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
         <TextField
           fullWidth
           variant="outlined"
           placeholder={displayText}
+          onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

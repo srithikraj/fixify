@@ -1,19 +1,22 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  Container,
-  TextField,
+  Box,
   Button,
-  Grid,
-  Typography,
-  MenuItem,
+  Card,
   Checkbox,
+  Container,
+  FormControl,
   FormControlLabel,
-  Stepper,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Step,
   StepLabel,
-  Select,
-  InputLabel,
-  FormControl,
+  Stepper,
+  TextField,
+  Typography,
 } from "@mui/material";
 
 const skillsList = [
@@ -31,11 +34,17 @@ const provinces = [
 ];
 
 const ServiceProviderSignup = () => {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
+  const [serverError, setServerError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [redirectMessage, setRedirectMessage] = useState("");
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    password: "",
     phone: "",
     role: "provider",
     bio: "",
@@ -48,13 +57,17 @@ const ServiceProviderSignup = () => {
       line2: "",
       unit_no: "",
       postal_code: "",
+      city: "",
       province: "",
       country: "Canada",
       longitude: 123123123,
       latitude: 123123123,
     },
   });
-  const [errors, setErrors] = useState({});
+
+  // --------------------------
+  // Handlers
+  // --------------------------
 
   const handleSkillsChange = (event) => {
     setFormData((prev) => ({ ...prev, skills: event.target.value }));
@@ -92,56 +105,9 @@ const ServiceProviderSignup = () => {
     }
   };
 
-  // const fetchCoordinates = async () => {
-  //   const fullAddress = `${formData.address.line1}, Waterloo, ${formData.address.province}, ${formData.address.postal_code}, ${formData.address.country}`;
-  //   const encodedAddress = encodeURIComponent(fullAddress);
-  //   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`;
-  //   try {
-  //     const response = await fetch(url);
-  //     const data = await response.json();
-  //     if (data.length > 0) {
-  //       setFormData((prev) => ({
-  //         ...prev,
-  //         address: {
-  //           ...prev.address,
-  //           latitude: parseFloat(data[0].lat),
-  //           longitude: parseFloat(data[0].lon),
-  //         },
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching coordinates:", error);
-  //   }
-  // };
-
-  const fetchCoordinates = async () => {
-    const { line1, province, postal_code, country } = formData.address;
-    const fullAddress = `${line1}, ${province}, ${postal_code}, ${country}`;
-    const encodedAddress = encodeURIComponent(fullAddress);
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`;
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.length > 0) {
-        setFormData((prev) => ({
-          ...prev,
-          address: {
-            ...prev.address,
-            latitude: parseFloat(data[0].lat),
-            longitude: parseFloat(data[0].lon),
-          },
-        }));
-        return true; // Success
-      } else {
-        setErrors((prev) => ({ ...prev, coordinates: "Address not found" }));
-        return false; // Failure
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-      setErrors((prev) => ({ ...prev, coordinates: "Error fetching coordinates" }));
-      return false;
-    }
-  };
+  // --------------------------
+  // Validation
+  // --------------------------
 
   const validateStep1 = () => {
     let newErrors = {};
@@ -169,206 +135,391 @@ const ServiceProviderSignup = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // --------------------------
+  // Step Navigation
+  // --------------------------
+
   const handleNext = () => {
-    if (activeStep === 0 && validateStep1()) {
-      setActiveStep((prev) => prev + 1);
-      setErrors({}); // Clear errors when moving forward
+    if (activeStep === 0) {
+      if (validateStep1()) {
+        setActiveStep((prev) => prev + 1);
+        setErrors({});
+        setServerError("");
+      }
     }
   };
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
-    setErrors({}); // Clear errors when going back
+    setErrors({});
   };
+
+  // --------------------------
+  // Submit Handler
+  // --------------------------
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (activeStep === 1 && validateStep2()) {
-      await fetchCoordinates();
-      console.log("Submitted Data:", formData);
-      // Add your submission logic here (e.g., API call)
+      // Combine formData into the payload
+      const payload = {
+        username: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        role: "provider",
+        address: formData.address,
+        schedule: formData.schedule,
+        skills: formData.skills,
+        hourlyRate: formData.hourlyRate,
+        serviceDescription: formData.serviceDescription,
+      };
+
+      console.log("Signup payload:", payload);
+
+      try {
+        const response = await fetch("http://localhost:3000/worker-signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        console.log("Signup result:", result);
+
+        if (!response.ok) {
+          if (result.message && result.message.toLowerCase().includes("exists")) {
+            setErrors((prev) => ({ ...prev, email: result.message }));
+            setActiveStep(0);
+          } else {
+            setServerError(result.message || "Signup failed. Please try again.");
+          }
+        } else {
+          const { userId } = result;
+          // Inform the user before navigating to the verification page.
+          setRedirectMessage("Taking you to the verification page....");
+          setTimeout(() => {
+            navigate("/verify-customer", { state: { userId, email: formData.email } });
+          }, 4000); // waits 2 seconds before navigation
+        }
+      } catch (error) {
+        console.error("Signup failed:", error);
+        setServerError("Signup failed. Please try again later.");
+      }
     }
   };
 
+  // --------------------------
+  // UI Rendering
+  // --------------------------
+
+  // If redirectMessage is set, display a full-page message.
+  if (redirectMessage) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          width: "100%",
+          background: "linear-gradient(to right, #7F7FD5, #86A8E7, #91EAE4)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: 4,
+        }}
+      >
+        <Typography variant="h5" sx={{ color: "#fff" }}>
+          {redirectMessage}
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
-    <Container maxWidth="sm" style={{ marginTop: "100px", padding: "20px" }}>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        <Step><StepLabel>Step 1</StepLabel></Step>
-        <Step><StepLabel>Step 2</StepLabel></Step>
-      </Stepper>
+    // Full-page gradient background
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100%",
+        background: "linear-gradient(to right, #7F7FD5, #86A8E7, #91EAE4)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        py: 4,
+      }}
+    >
+      <Container maxWidth="md">
+        <Card sx={{ display: "flex", borderRadius: 2, overflow: "hidden" }}>
+          {/* Left Panel */}
 
-      {activeStep === 0 && (
-        <Grid container spacing={2} style={{ marginTop: "20px" }}>
-          <Typography align="center" variant="h5">Service Provider Sign Up - Step 1 of 2</Typography>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="First Name"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              error={!!errors.firstName}
-              helperText={errors.firstName}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-              error={!!errors.lastName}
-              helperText={errors.lastName}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              error={!!errors.email}
-              helperText={errors.email}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              error={!!errors.phone}
-              helperText={errors.phone}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Address Line 1"
-              name="address.line1"
-              value={formData.address.line1}
-              onChange={handleChange}
-              required
-              error={!!errors["address.line1"]}
-              helperText={errors["address.line1"]}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Address Line 2 (optional)"
-              name="address.line2"
-              value={formData.address.line2}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Postal Code"
-              name="address.postal_code"
-              value={formData.address.postal_code}
-              onChange={handleChange}
-              required
-              error={!!errors["address.postal_code"]}
-              helperText={errors["address.postal_code"]}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth error={!!errors["address.province"]}>
-              <InputLabel>Province</InputLabel>
-              <Select value={formData.address.province} onChange={handleProvinceChange}>
-                <MenuItem value=""><em>Select Province</em></MenuItem>
-                {provinces.map((province) => (
-                  <MenuItem key={province} value={province}>{province}</MenuItem>
-                ))}
-              </Select>
-              {errors["address.province"] && (
-                <Typography variant="caption" color="error">{errors["address.province"]}</Typography>
-              )}
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" color="primary" onClick={handleNext}>Next</Button>
-          </Grid>
-        </Grid>
-      )}
+          {/* Right Panel */}
+          <Box sx={{ flex: 2, p: 3 }}>
+            <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+              {activeStep === 0
+                ? "Step 1: Basic Information"
+                : "Step 2: Skills & Schedule"}
+            </Typography>
 
-      {activeStep === 1 && (
-        <Grid container spacing={2} style={{ marginTop: "20px" }}>
-          <Typography variant="h5">Service Provider Sign Up - Step 2 of 2</Typography>
-          <Grid item xs={12}>
-            <FormControl fullWidth error={!!errors.skills}>
-              <InputLabel>Skills</InputLabel>
-              <Select multiple value={formData.skills} onChange={handleSkillsChange}>
-                {skillsList.map((skill) => (
-                  <MenuItem key={skill} value={skill}>{skill}</MenuItem>
-                ))}
-              </Select>
-              {errors.skills && <Typography variant="caption" color="error">{errors.skills}</Typography>}
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Hourly Rate ($)"
-              name="hourlyRate"
-              type="number"
-              value={formData.hourlyRate}
-              onChange={handleChange}
-              required
-              error={!!errors.hourlyRate}
-              helperText={errors.hourlyRate}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Service Description"
-              name="serviceDescription"
-              multiline
-              rows={3}
-              value={formData.serviceDescription}
-              onChange={handleChange}
-              required
-              error={!!errors.serviceDescription}
-              helperText={errors.serviceDescription}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6">Schedule</Typography>
-            {errors.schedule && <Typography variant="caption" color="error">{errors.schedule}</Typography>}
-            {daysOfWeek.map((day) => (
-              <Grid key={day} container spacing={1} alignItems="center">
-                <Typography variant="body1" style={{ minWidth: "100px" }}>{day}</Typography>
-                {timeSlots.map((slot) => (
-                  <FormControlLabel
-                    key={slot}
-                    control={<Checkbox checked={formData.schedule[day]?.includes(slot) || false} onChange={() => handleScheduleChange(day, slot)} />}
-                    label={slot}
-                  />
-                ))}
-              </Grid>
-            ))}
-          </Grid>
-          <Grid item xs={6}>
-            <Button variant="contained" onClick={handleBack}>Back</Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
-          </Grid>
-        </Grid>
-      )}
-    </Container>
+            {/* Display server-wide error, if any */}
+            {serverError && (
+              <Typography variant="body2" color="error" sx={{ mb: 2 }}>
+                {serverError}
+              </Typography>
+            )}
+
+            {/* Stepper Indicator */}
+            <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 3 }}>
+              <Step>
+                <StepLabel>Step 1</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Step 2</StepLabel>
+              </Step>
+            </Stepper>
+
+            {/* Step 1 Fields */}
+            {activeStep === 0 && (
+              <Box component="form" noValidate onSubmit={handleNext}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label="First Name"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.firstName}
+                      helperText={errors.firstName}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label="Last Name"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.lastName}
+                      helperText={errors.lastName}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.email}
+                      helperText={errors.email}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Password"
+                      name="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.password}
+                      helperText={errors.password}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.phone}
+                      helperText={errors.phone}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Address Line 1"
+                      name="address.line1"
+                      value={formData.address.line1}
+                      onChange={handleChange}
+                      required
+                      error={!!errors["address.line1"]}
+                      helperText={errors["address.line1"]}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Address Line 2 (optional)"
+                      name="address.line2"
+                      value={formData.address.line2}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label="Postal Code"
+                      name="address.postal_code"
+                      value={formData.address.postal_code}
+                      onChange={handleChange}
+                      required
+                      error={!!errors["address.postal_code"]}
+                      helperText={errors["address.postal_code"]}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl fullWidth error={!!errors["address.province"]}>
+                      <InputLabel>Province</InputLabel>
+                      <Select
+                        value={formData.address.province}
+                        onChange={handleProvinceChange}
+                        label="Province"
+                      >
+                        <MenuItem value="">
+                          <em>Select Province</em>
+                        </MenuItem>
+                        {provinces.map((province) => (
+                          <MenuItem key={province} value={province}>
+                            {province}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors["address.province"] && (
+                        <Typography variant="caption" color="error">
+                          {errors["address.province"]}
+                        </Typography>
+                      )}
+                    </FormControl>
+                  </Grid>
+                </Grid>
+
+                <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
+                  <Button variant="contained" color="primary" type="submit">
+                    Next
+                  </Button>
+                </Box>
+              </Box>
+            )}
+
+            {/* Step 2 Fields */}
+            {activeStep === 1 && (
+              <Box component="form" noValidate onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth error={!!errors.skills}>
+                      <InputLabel>Skills</InputLabel>
+                      <Select
+                        multiple
+                        value={formData.skills}
+                        onChange={handleSkillsChange}
+                        label="Skills"
+                      >
+                        {skillsList.map((skill) => (
+                          <MenuItem key={skill} value={skill}>
+                            {skill}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors.skills && (
+                        <Typography variant="caption" color="error">
+                          {errors.skills}
+                        </Typography>
+                      )}
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Hourly Rate ($)"
+                      name="hourlyRate"
+                      type="number"
+                      value={formData.hourlyRate}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.hourlyRate}
+                      helperText={errors.hourlyRate}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Service Description"
+                      name="serviceDescription"
+                      multiline
+                      rows={3}
+                      value={formData.serviceDescription}
+                      onChange={handleChange}
+                      required
+                      error={!!errors.serviceDescription}
+                      helperText={errors.serviceDescription}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                      Schedule
+                    </Typography>
+                    {errors.schedule && (
+                      <Typography variant="caption" color="error">
+                        {errors.schedule}
+                      </Typography>
+                    )}
+                    {daysOfWeek.map((day) => (
+                      <Grid key={day} container spacing={1} alignItems="center">
+                        <Typography
+                          variant="body1"
+                          sx={{ minWidth: "100px", fontWeight: 500 }}
+                        >
+                          {day}
+                        </Typography>
+                        {timeSlots.map((slot) => (
+                          <FormControlLabel
+                            key={slot}
+                            control={
+                              <Checkbox
+                                checked={
+                                  formData.schedule[day]?.includes(slot) || false
+                                }
+                                onChange={() => handleScheduleChange(day, slot)}
+                              />
+                            }
+                            label={slot}
+                          />
+                        ))}
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Grid>
+
+                <Box
+                  sx={{
+                    mt: 3,
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button variant="outlined" onClick={handleBack}>
+                    Back
+                  </Button>
+                  <Button variant="contained" color="primary" type="submit">
+                    Submit
+                  </Button>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

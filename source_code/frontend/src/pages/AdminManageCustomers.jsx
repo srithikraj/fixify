@@ -52,7 +52,6 @@ const ManageCustomers = () => {
       }));
 
       setCustomers(consumers);;
-      setCustomers(consumers);
     } catch (err) {
       console.error("Error fetching users:", err);
     }
