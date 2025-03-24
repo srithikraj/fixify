@@ -4,18 +4,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import SearchBar from "./searchBar";
-import carpentor from "../../assets/carpentor.jpg";
-import plumber from "../../assets/plumber.png";
-import painter from "../../assets/painter.png";
-import metalGrinder from "../../assets/metalGrinder.jpg";
-import cleaner from "../../assets/cleaner.jpg";
 
+import carpenter from "../../assets/carpenter.jpg";
+import electrician from "../../assets/electrician.jpg";
+import metalGrinder from "../../assets/metalGrinder.jpg";
+import plumbing from "../../assets/plumbing.jpg";
+import welder from "../../assets/welding.jpg";
 const images = [
-  carpentor,
-  plumber,
-  painter,
+  carpenter,
+  electrician,
+  plumbing,
   metalGrinder,
-  cleaner
+  welder
 ];
 
 
