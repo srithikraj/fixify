@@ -7,6 +7,7 @@ import axios from "axios";
 const CustomerProfile = () => {
   const { user, setUser } = useContext(AuthContext);
   const { isAuthenticated } = useContext(AuthContext);
+  console.log(user)
   
   const [formData, setFormData] = useState({ 
     username: "", 
@@ -29,7 +30,6 @@ const CustomerProfile = () => {
 
   useEffect(() => {
     if (user) {
-      console.log(user)
       setFormData({
         username: user.username || "",
         name: user.first_name || "",
@@ -53,20 +53,36 @@ const CustomerProfile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.put("http://localhost:3000/users/update", { 
-        username: user.username, 
-        ...formData 
-      });
+      // Create a payload with the fields you want to update.
+      // Email is used as the identifier but is not changed.
+      const payload = {
+        id: user.id || user._id,
+        email: user.email, // identifier, not editable
+        username: formData.username, // this might be editable in your case, or not, adjust as needed
+        name: formData.name,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        addressln1: formData.addressln1,
+        province: formData.province,
+        postalCode: formData.postalCode,
+      };
+  
+      const response = await axios.put("http://localhost:3000/users/update", payload);
+  
       if (response.data.success) {
-        setUser({ ...user, ...formData });
+        // Update the user context with the new profile data.
+        setUser(response.data.data);
         setIsEditing(false);
+        alert("Profile updated successfully!");
       } else {
-        alert(response.data.message);
+        alert("Update failed: " + response.data.message);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
+      alert("An error occurred while updating your profile.");
     }
   };
+  
 
   return (
     <Container maxWidth="xl" sx={{ marginTop: 5, display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
@@ -141,7 +157,7 @@ const CustomerProfile = () => {
                     onChange={handleChange} 
                     fullWidth 
                     margin="normal" 
-                    disabled={!isEditing}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={6}>

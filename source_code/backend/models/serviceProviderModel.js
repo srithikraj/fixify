@@ -18,4 +18,4 @@ const serviceProviderSchema = new Schema({
     reviews_count: { type: Number, default: 0 } // Default is 0
 }, { timestamps: true });
 
-module.exports = mongoose.model("serviceProvider", serviceProviderSchema, "serviceProviders");
+module.exports = mongoose.model("serviceProvider", serviceProviderSchema, "service_providers");

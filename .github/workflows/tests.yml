@@ -1,3 +1,45 @@
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+        
+#       - name: Verify repo structure
+#         run: ls -R 
+        
+#       - name: Set up Node.js (for frontend projects)
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+
+#       # run ./setup.sh to install dependencies
+#       - name: Install dependencies
+#         run: ./setup.sh
+#         working-directory: ./
+
+
+#       # - name: Run frontend tests
+#       #   run: npm test
+#       #   working-directory: source_code/frontend
+      
+#       - name: Run backend tests
+#         run: npm test
+#         working-directory: source_code/backend
+
+
+
 name: CI/CD Pipeline
 
 on:
@@ -11,15 +53,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+        ATLAS_URI: mongodb+srv://fixifydev:46SgruY75iezyd9o@fixifycluster0.f0fkl.mongodb.net/fixifydev retryWrites=true&w=majority&appName=FixifyCluster0
+        JWT_SECRET: 3yJv9kL8s5d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7d9f8s7
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         
       - name: Verify repo structure
         run: ls -R 
-        
-      - name: Set up Node.js (for frontend projects)
+
+      # Set up Node.js for frontend and backend
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -29,12 +74,30 @@ jobs:
         run: ./setup.sh
         working-directory: ./
 
-
-      # - name: Run frontend tests
-      #   run: npm test
-      #   working-directory: source_code/frontend
       
       - name: Run backend tests
         run: npm test
         working-directory: source_code/backend
+
+      # ----- Selenium Tests for Frontend (Python) -----
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Create and activate virtual environment and install Python dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r source_code/frontend/__tests__/requirements.txt
+        working-directory: ./
+
+      - name: Run Selenium tests for frontend
+        run: |
+          source venv/bin/activate
+          # Assuming your Selenium tests are discoverable with unittest in the specified directory:
+          python -m unittest discover -s source_code/frontend/__tests__
+        working-directory: ./
+
         
