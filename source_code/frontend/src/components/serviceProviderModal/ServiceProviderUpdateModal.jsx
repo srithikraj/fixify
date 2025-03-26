@@ -22,6 +22,28 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
     handleClose();
   };
 
+
+  const handleDelete = async (workerId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/users/${workerId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete customer");
+      }
+      const result = await response.json();
+      console.log(result.message);
+      setDeleteDialogOpen(false);
+      handleClose(); // Closing both modals
+      // Optionally, notify the parent component that the customer has been deleted
+    } catch (error) {
+      console.error("Error deleting worker:", error);
+    }
+  };
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -84,7 +106,7 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
         </DialogContent>
         <DialogActions >
           <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleConfirmDelete}>
+          <Button variant="contained" color="error" onClick={() => handleDelete(worker.user_id)}>
             Yes, Delete
           </Button>
         </DialogActions>

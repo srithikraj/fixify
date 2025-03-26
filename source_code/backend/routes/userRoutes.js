@@ -290,13 +290,17 @@ userRoutes.put("/users/update", async (req, res) => {
 // Delete Routes
 //////////////////////////////////////////////////////////////////////////
 
+
+// deletes consumers as well as providers
 userRoutes.delete("/users/:id", async (req, res) => {
+    console.log("Deleting user with ID:", req.params.id);
     try {
       let db = database.getDb();
       const customerId = req.params.id;
   
       // Delete the customer document matching the given ID
       const result = await db.collection("users").deleteOne({ _id: new ObjectId(customerId) });
+    //   const result2 = await db.collection("service_provider").deleteOne({ user_id: new ObjectId(customerId) });
       
       if (result.deletedCount === 0) {
         return res.status(404).json({ message: "Customer not found" });
@@ -307,7 +311,7 @@ userRoutes.delete("/users/:id", async (req, res) => {
       console.error("Error deleting customer:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
-  });    
+  });  
 
 
 //========================================================================

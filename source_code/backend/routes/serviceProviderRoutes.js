@@ -48,6 +48,7 @@ serviceProviderRoutes.route("/serviceProviders").get(async (request, response) =
                     "status": 1,
                     "ratings": 1,
                     "services": 1,
+                    "user_id": 1,
                     "reviews_count": 1,
                     "userDetails.username": 1,
                     "userDetails.email": 1,

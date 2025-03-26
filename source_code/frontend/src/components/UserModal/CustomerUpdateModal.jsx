@@ -7,7 +7,6 @@ import {
   
   const CustomerUpdateModal = ({ open, handleClose, customer }) => {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    console.log("Customer:", customer);
   
     if (!customer) return null; // Prevent rendering if no customer is selected
   

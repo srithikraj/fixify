@@ -215,7 +215,7 @@ const AdminDashboard = () => {
 
   return (
     <Box sx={{ 
-      display: "flex", 
+      width: "90%",marginTop: -10, marginLeft: 5, p: 3,
       flexDirection: "column", 
       backgroundColor: "#f8f9fa", 
       minHeight: "100vh" 

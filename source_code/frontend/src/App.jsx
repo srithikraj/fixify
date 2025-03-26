@@ -95,6 +95,7 @@ import ContactUs from './pages/ContactUs';
 import CustomerProfile from './pages/CustomerProfile';
 import ProtectedRoute from './components/ProtectedRoute'; // Import Protected Route
 import WorkerProfile from './pages/WorkerProfile';
+import NotAuthorized from './pages/NotAuthorized';
 
 const App = () => {
   return (
@@ -112,13 +113,14 @@ const App = () => {
             <Route path="signup-choice" element={<SignupChoice />} />
             <Route path="findService" element={<FindService />} />
             <Route path="contactus" element={<ContactUs />} />
+            <Route path="unauthorized" element={<NotAuthorized />} />
             {/* <Route path="CustomerProfile" element={<CustomerProfile />} /> */}
-            <Route path="/CustomerProfile" element={<ProtectedRoute><CustomerProfile /></ProtectedRoute>} />
-            <Route path="/WorkerProfile" element={<ProtectedRoute><WorkerProfile /></ProtectedRoute>} />
+            <Route path="/CustomerProfile" element={<ProtectedRoute allowedRoles={['consumer']}><CustomerProfile /></ProtectedRoute>} />
+            <Route path="/WorkerProfile" element={<ProtectedRoute allowedRoles={['provider']}><WorkerProfile /></ProtectedRoute>} />
           </Route>
 
           {/* Admin Routes (Protected) */}
-          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminLayout /></ProtectedRoute>}>
             <Route index element={<AdminDashboard />} />
             <Route path="customers" element={<ManageCustomers />} />
             <Route path="workers" element={<ManageWorkers />} />
