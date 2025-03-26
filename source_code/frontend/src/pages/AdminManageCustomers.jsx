@@ -21,15 +21,15 @@ const ManageCustomers = () => {
   useEffect(() => {
     handleFetchUsers()
   }, []);
-  const handleDeleteClick = () => {
-    setDeleteDialogOpen(true);
-  };
+  // const handleDeleteClick = () => {
+  //   setDeleteDialogOpen(true);
+  // };
 
-  const handleConfirmDelete = () => {
-    // Perform account deletion (API Call or State Update)
-    setDeleteDialogOpen(false);
-    handleClose(); // Closing both modals
-  };
+  // const handleConfirmDelete = () => {
+  //   // Perform account deletion (API Call or State Update)
+  //   setDeleteDialogOpen(false);
+  //   handleClose(); // Closing both modals
+  // };
 
 
   // Function to open modal with selected customer
@@ -60,7 +60,7 @@ const ManageCustomers = () => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
+    <Box sx={{ width: "80%", marginLeft: 15,marginTop: 5, p: 3 }}>
       <Typography variant="h4" fontWeight="bold">Manage Customers</Typography>
       <TextField fullWidth label="Search customers..." sx={{ my: 2 }} />
 
@@ -70,6 +70,7 @@ const ManageCustomers = () => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
+              <TableCell>Registered on</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -78,6 +79,7 @@ const ManageCustomers = () => {
               <TableRow key={index}>
                 <TableCell>{customer.name}</TableCell>
                 <TableCell>{customer.email}</TableCell>
+                <TableCell>{new Date(customer.createdAt).toLocaleString()}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"

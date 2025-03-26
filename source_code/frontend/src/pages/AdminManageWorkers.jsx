@@ -18,6 +18,7 @@ const ManageWorkers = () => {
   const [open, setOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [workers, setWorker] = useState([]);
+  console.log(workers);
 
   useEffect(() => {
     fetchData();
@@ -78,7 +79,7 @@ const ManageWorkers = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
+    <Box sx={{ width: "100%", marginLeft: 15,marginTop: 5, p: 3 }}>
       <Typography variant="h4" fontWeight="bold">
         Manage Workers
       </Typography>
@@ -99,7 +100,7 @@ const ManageWorkers = () => {
             {workers.map((worker, index) => (
               <TableRow key={index}>
                 <TableCell style={{ textTransform: "capitalize" }}>
-                  {worker.userDetails.username}
+                  {worker.userDetails.first_name} {worker.userDetails.last_name}
                 </TableCell>
                 <TableCell>{worker.userDetails.email}</TableCell>
                 <TableCell>{worker.services.join(", ")}</TableCell>
