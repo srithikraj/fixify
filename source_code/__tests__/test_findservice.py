@@ -31,7 +31,7 @@ def test_worker_profiles():
     except TimeoutException:
         print("❌ Worker profiles did not load!")
 
-# Run Tests
+# Run Test
 try:
     test_page_load()
     test_worker_profiles()
