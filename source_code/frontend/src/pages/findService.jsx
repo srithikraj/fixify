@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar/Navbar.jsx';
 import WorkerContactModal from '../components/UserModal/WorkerContactModal.jsx';
+import { getAllServiceProviders, getVerifiedServiceProviders } from '../api/serviceProviderApi';
 
-const Navbar2 = ({ onSort }) => {
+const services_offered = [
+  "Plumbing", "Electrical", "Carpentry", "Painting", "Cleaning", 
+  "HVAC Repair", "Gardening", "Pest Control", "Roofing", "Masonry", 
+  "Appliance Repair", "Flooring", "Locksmith", "Window Cleaning", 
+  "Handyman", "Drywall Repair", "Tile Work", "Furniture Assembly",
+  "Pressure Washing", "Pool Maintenance"
+]
+
+const Navbar2 = ({ onFilter, onSort }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   const toggleDropdown = (menu) => {
@@ -15,9 +24,33 @@ const Navbar2 = ({ onSort }) => {
   };
 
   const handleFilter = (skills) => {
-    onFilter(skills);  // Trigger filter
+    onFilter(skills);
     setActiveDropdown(null);  // Close the dropdown after selection
   };
+
+  const handleCloseDropdown = () => {
+    setActiveDropdown(null);
+  }
+  useEffect(() => {
+    // Close dropdown if clicked outside
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.dropdown')) {
+        handleCloseDropdown();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  // Add option clear all filters and sorting
+  const handleClearAll = () => {
+    onFilter(null); // Reset filters
+    onSort(null, null); // Reset sorting
+    setActiveDropdown(null); // Close all dropdowns
+  }
 
   return (
     <div className="navbar2">
@@ -27,13 +60,14 @@ const Navbar2 = ({ onSort }) => {
         <button className="nav-btn" onClick={() => toggleDropdown('skills')}>
           Skills ▼
         </button>
+        {/* Dropdown scrollable list for skills */}
         {activeDropdown === 'skills' && (
-          <div className="dropdown-list">
-            <button onClick={() => handleFilter('Electrician')}>Electrician</button>
-            <button onClick={() => handleFilter('Plumber')}>Plumber</button>
-            <button onClick={() => handleFilter('Carpenter')}>Carpenter</button>
-            <button onClick={() => handleFilter('Painter')}>Painter</button>
-            <button onClick={() => handleFilter('Construction')}>Construction</button>
+          <div className="dropdown-list" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+            {services_offered.map((skill) => (
+              <button key={skill} onClick={() => handleFilter(skill)}>
+                {skill}
+              </button>
+            ))}
           </div>
         )}
       </div>
@@ -63,7 +97,15 @@ const Navbar2 = ({ onSort }) => {
         )}
       </div>
 
-      {/* Location Dropdown */}
+      {/* Show button to reset all filters*/}
+      <div className="dropdown">
+        <button className="nav-btn" onClick={handleClearAll}>
+          x Filters
+        </button>
+      </div>
+
+
+      {/* Location Dropdown 
       <div className="dropdown">
         <button className="nav-btn" onClick={() => toggleDropdown('location')}>
           Location ▼
@@ -74,107 +116,38 @@ const Navbar2 = ({ onSort }) => {
             <button onClick={() => handleSort('location', 'farthest')}>Farthest</button>
           </div>
         )}
-      </div>
+      </div>*/}
     </div>
   );
 };
 
 const FindService = () => {
-  const profileData = [
-    {
-      id: 1,
-      name: 'John Doe',
-      photo: 'photo.png',
-      rate: '30$/Hour',
-      rating: 4,
-      location: 'New York, USA',
-      skills: 'Plumber, Carpenter',
-      email: 'john.doe@example.com',
-      isVerified: true,
-      reviews: [
-        { reviewer: "Alice Smith", rating: 4, comment: "Efficient & Quick plumber, fixed my sink quickly!", date: "2025-02-15" },
-        { reviewer: "Bob Johnson", rating: 3.5, comment: "Good quality work, but a bit late.", date: "2025-01-20" },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      photo: 'photo.png',
-      rate: '35$/Hour',
-      rating: 5,
-      location: 'London, UK',
-      skills: 'Electrician',
-      email: 'jane.smith@example.com',
-      isVerified: false,
-      reviews: [
-        { reviewer: "Charlie Brown", rating: 5, comment: "Friendly and efficient service, highly recommend!", date: "2025-03-01" },
-        { reviewer: "Diana Lee", rating: 5, comment: "Good communication, fixed my wiring efficiently.", date: "2025-02-10" },
-      ],
-    },
-    {
-      id: 3,
-      name: 'Emily Johnson',
-      photo: 'photo.png',
-      rate: '70$/Hour',
-      rating: 4.5,
-      location: 'Toronto, Canada',
-      skills: 'Carpenter, Painter',
-      email: 'emily.johnson@example.com',
-      isVerified: true,
-      reviews: [
-        { reviewer: "Eve Davis", rating: 4.5, comment: "Good quality carpentry work!", date: "2025-02-25" },
-      ],
-    },
-    {
-      id: 4,
-      name: 'Chris Lee',
-      photo: 'photo.png',
-      rate: '54$/Hour',
-      rating: 3.5,
-      location: 'Berlin, Germany',
-      skills: 'Electrician, Carpenter',
-      email: 'chris.lee@example.com',
-      isVerified: true,
-      reviews: [
-        { reviewer: "Frank Miller", rating: 3, comment: "Good communication, but could improve efficiency.", date: "2025-01-15" },
-        { reviewer: "Grace Kim", rating: 4, comment: "Friendly and good quality carpentry skills.", date: "2025-02-05" },
-      ],
-    },
-    {
-      id: 5,
-      name: 'Samantha Brown',
-      photo: 'photo.png',
-      rate: '29$/Hour',
-      rating: 4,
-      location: 'Sydney, Australia',
-      skills: 'Construction, Carpenter, Painter, Electrician',
-      email: 'samantha.brown@example.com',
-      isVerified: false,
-      reviews: [
-        { reviewer: "Henry Wilson", rating: 4, comment: "Efficient & Quick, good value for money.", date: "2025-03-02" },
-      ],
-    },
-    {
-      id: 6,
-      name: 'Michael Miller',
-      photo: 'photo.png',
-      rate: '30$/Hour',
-      rating: 4.5,
-      location: 'San Francisco, USA',
-      skills: 'Plumber',
-      email: 'michael.miller@example.com',
-      isVerified: true,
-      reviews: [
-        { reviewer: "Ivy Chen", rating: 4.5, comment: "Friendly and quick plumbing service.", date: "2025-02-20" },
-        { reviewer: "Jack Taylor", rating: 4, comment: "Good quality and good communication.", date: "2025-01-30" },
-      ],
-    },
-  ];
 
+  const [profileData, setProfileData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
-  const [sortedProfiles, setSortedProfiles] = useState(profileData);
-  const [filteredProfiles, setFilteredProfiles] = useState(profileData);
+  const [filteredProfiles, setFilteredProfiles] = useState([]);
+  const [sortedProfiles, setSortedProfiles] = useState([]);
+
+  useEffect(() => {
+    // Fetch profile data from backend API
+    getVerifiedServiceProviders()
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Profile data:", response.data.data);
+          response.data.data.forEach((profile) => {
+            profile.photo = `photo.png`;
+            profile.rate = profile.hourly_rate;
+          });
+          setProfileData( [...response.data.data]);
+          setSortedProfiles([...response.data.data]);
+          setFilteredProfiles([...response.data.data]); 
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching profile data:", error);
+      });
+  }, []);
 
   const handleContactClick = (worker) => {
     setSelectedWorker(worker);
@@ -187,31 +160,39 @@ const FindService = () => {
   };
 
   const filterProfiles = (skills) => {
-    const filteredData = profileData.filter(profile =>{
-      const profileSkills = profile.skills.toLowerCase();
-      return profileSkills.includes(skills.toLowerCase());
+    if (!skills) {
+      // If no skill is selected, reset to show all profiles
+      setFilteredProfiles(profileData);
+      setSortedProfiles(profileData);
+      return;
     }
-    );
-    setFilteredProfiles(filteredData);
-    
-    setSortedProfiles(filteredData);  // Ensure sorted profiles reflect the filtered data
-
+  
+    const filtered = profileData.filter((profile) => {
+      // Ensure case-insensitive comparison
+      return profile.services.some((service) =>
+        service.toLowerCase() === skills.toLowerCase()
+      );
+    });
+  
+    setFilteredProfiles(filtered);
+    setSortedProfiles(filtered); // Update sortedProfiles to reflect the filtered data
+    console.log("Filtered profiles:", filtered);
   };
 
   
 
   const sortProfiles = (category, order) => {
-    let sortedData = [...filteredProfiles];  // Sort filteredProfiles, not profileData
-
+    let sortedData = [...filteredProfiles]; // Sort filteredProfiles, not profileData
+  
     if (category === 'rating') {
-      sortedData.sort((a, b) => order === 'asc' ? a.rating - b.rating : b.rating - a.rating);
+      sortedData.sort((a, b) => order === 'asc' ? a.ratings - b.ratings : b.ratings - a.ratings);
     } else if (category === 'price') {
       sortedData.sort((a, b) => {
-        const priceA = parseFloat(a.rate.replace('$', '').replace('/Hour', ''));
-        const priceB = parseFloat(b.rate.replace('$', '').replace('/Hour', ''));
+        const priceA = a.rate;
+        const priceB = b.rate;
         return order === 'asc' ? priceA - priceB : priceB - priceA;
       });
-    } else if (category === 'location') {
+    } /*else if (category === 'location') {
       // Assuming a simple location sorting based on alphabetical order
       sortedData.sort((a, b) => {
         if (order === 'nearest') {
@@ -220,10 +201,28 @@ const FindService = () => {
           return b.location.localeCompare(a.location);
         }
       });
-    }
+    }*/
+  
+    console.log("Sorted data:", sortedData);
     setSortedProfiles(sortedData);
-    setFilteredProfiles(sortedData);  // Update filteredProfiles after sorting
+  };
 
+  const getNameString = (firstName, lastName) => {
+    if (!firstName || !lastName) {
+      return "Unknown";
+    }
+    return `${firstName} ${lastName}`;
+  };
+
+  const getLocationString = (address) => {
+    if (!address
+      || !address.line1
+      || !address.postal_code
+      || !address.province
+      || !address.country) {
+      return "Unknown";
+    }
+    return `${address.line1}, ${address.postal_code}, ${address.province}, ${address.country}`.toUpperCase();
   };
 
   return (
@@ -236,19 +235,19 @@ const FindService = () => {
             <div className="card-inner">
               {/* Front side of the card */}
               <div className="card-front">
-                <img src={profile.photo} alt={profile.name} className="profile-photo" />
-                <h3>{profile.name}</h3>
-                <h3>{profile.rate}</h3>
+                <img src={profile.photo} alt={getNameString(profile.userDetails.first_name, profile.userDetails.last_name)} className="profile-photo" />
+                <h3>{getNameString(profile.userDetails.first_name, profile.userDetails.last_name)}</h3>
+                <h3>${profile.rate}/hr</h3>
                 <p>
                   <img src="star.png" alt="star" className="rating-star" />
-                  {profile.rating} / 5
+                  {profile.ratings} / 5
                 </p>
               </div>
 
               {/* Back side of the card */}
               <div className="card-back">
-                <p><strong>Location:</strong> {profile.location}</p>
-                <p><strong>Skills:</strong> {profile.skills}</p>
+                <p><strong>Location:</strong> {getLocationString(profile.userDetails.address)} </p>
+                <p><strong>Services:</strong> {profile.services.join(", ")}</p>
                 <button 
                   className="contact-btn" 
                   onClick={() => handleContactClick(profile)}
