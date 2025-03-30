@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { verifyUser } from "../api/userApi";
 import axios from "axios";
-
+import welcomeBackImage from "../assets/WelcomeBack.jpg";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, login } = useContext(AuthContext);
@@ -22,7 +22,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/admin");
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
 
@@ -86,7 +86,7 @@ const LoginPage = () => {
           background: "linear-gradient(to bottom right, #7e57c2, #000)",
         }}
       >
-        <Box component="img" src="/src/pages/WelcomeBack.jpg" alt="Welcome Image" sx={{ width: "60%", mb: 2 }} />
+        <Box component="img" src={welcomeBackImage} alt="Welcome Image" sx={{ width: "60%", mb: 2 }} />
         <Box>
           <Typography variant="h4" sx={{ fontWeight: "bold" }}>
             Welcome Back!
