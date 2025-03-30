@@ -1,0 +1,9 @@
+python3 -m venv venv
+>> source venv/bin/activate
+>> pip install selenium
+>> python3 test_xyz.py
+
+test coverage:
+>> coverage run -m unittest test_xyz.py  
+>> converage report
+>> coverage html
