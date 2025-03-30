@@ -46,7 +46,7 @@ serviceProviderRoutes.route("/serviceProviders").get(async (request, response) =
                 $project: {
                     "_id": 1,
                     "status": 1,
-                    "ratings": 1,
+                    "ratings": 1, // todo rename to rating
                     "services": 1,
                     "user_id": 1,
                     "reviews_count": 1,
@@ -81,6 +81,81 @@ serviceProviderRoutes.route("/serviceProviders").get(async (request, response) =
     }
 });
 
+
+/**
+ * Description: Get all service providers verified status
+ * Request Type: GET 
+ * URL: http://localhost:3000/verified/serviceProviders
+*/
+serviceProviderRoutes.route("/verified/serviceProviders").get(async (request, response) => {
+    try {
+        let db = database.getDb();
+
+        // Get pagination parameters (default: page=1, limit=10)
+        let page = parseInt(request.query.page) || 1;
+        let limit = parseInt(request.query.limit) || 10;
+        let skip = (page - 1) * limit;
+
+        // Get city from query parameter
+        let city = request.query.city;
+
+        // Aggregation pipeline for fetching service providers with user details
+        let serviceProviders = await db.collection("service_providers").aggregate([
+            {
+                $match: { status: "verified" } // Match documents based on verified status
+            },
+            {
+                $addFields: {
+                    user_id: { $toObjectId: "$user_id" } // Convert user_id to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "users", // Ensure this is the correct collection name
+                    localField: "user_id",
+                    foreignField: "_id",
+                    as: "userDetails"
+                }
+            },
+            { $unwind: "$userDetails" }, // Flatten the array
+            {
+                $project: {
+                    "_id": 1,
+                    "status": 1,
+                    "ratings": 1, // todo rename to rating
+                    "services": 1,
+                    "reviews_count": 1,
+                    "hourly_rate": 1,
+                    "userDetails.username": 1,
+                    "userDetails.email": 1,
+                    "userDetails.first_name": 1,
+                    "userDetails.last_name": 1,
+                    "userDetails.phone": 1,
+                    "userDetails.address": 1
+                }
+            },
+            { $skip: skip },
+            { $limit: limit }
+        ]).toArray();
+    console.log(serviceProviders);
+     // Get total count for pagination info
+     let total = await db.collection("service_providers").countDocuments();
+     let totalPages = Math.ceil(total / limit);
+
+     response.json({
+         total,
+         totalPages,
+         currentPage: page,
+         limit,
+         data: serviceProviders
+     });
+
+ } catch (error) {
+     console.error("Error fetching service providers:", error);
+     response.status(500).json({ message: "Internal Server Error" });
+ }
+});
+        
 
 // // PATCH endpoint to update a service provider's status
 // serviceProviderRoutes.put("/serviceProviders/:id", async (req, res) => {
