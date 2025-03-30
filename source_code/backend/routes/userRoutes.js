@@ -120,92 +120,259 @@ userRoutes.post("/signup", async (req, res) => {
 
 
 // worker sign u route
+// userRoutes.post("/worker-signup", async (req, res) => {
+//     const session = await mongoose.startSession();
+//     session.startTransaction();
+//     try {
+//       const {
+//         username,
+//         password,
+//         first_name,
+//         last_name,
+//         email,
+//         phone,
+//         address,
+//         skills,           // an array e.g., ["Plumbing", "Electrical"]
+//         hourlyRate,       // number value
+//         serviceDescription,
+//         schedule,         // object containing availability info
+//       } = req.body;
+  
+//       // Check if user already exists
+//       const existingUser = await User.findOne({
+//         $or: [{ username }, { email }]
+//       }).session(session);
+//       if (existingUser) {
+//         await session.abortTransaction();
+//         session.endSession();
+//         return res.status(400).json({ message: "Username or email already exists." });
+//       }
+  
+//       // Hash the password
+//       const hashedPassword = await bcrypt.hash(password, 10);
+  
+//       // Create new user document
+//       const newUser = new User({
+//         username,
+//         password: hashedPassword,
+//         first_name,
+//         last_name,
+//         email,
+//         phone,
+//         role: "provider",
+//         address,
+//         isVerified: false,
+//       });
+//       await newUser.save({ session });
+  
+//       // Create service provider document that references the new user
+//       const newServiceProvider = new ServiceProvider({
+//         user_id: newUser._id,
+//         status: "pending", // or "verified" based on your business logic
+//         availability: schedule,
+//         ratings: 0,
+//         reviews_count: 0,
+//         // Optionally, you can also store an array of services if available
+//       });
+//       await newServiceProvider.save({ session });
+  
+//       // Create a service document if the worker provides a service.
+//       // For multiple skills, you can loop through skills to create multiple documents.
+//       // Here we assume only one service is registered for simplicity.
+//       const newService = new Service({
+//         user_id: newUser._id,
+//         type: skills,  // use the first skill or loop through skills if necessary
+//         description: serviceDescription,
+//         hourly_rate: hourlyRate,
+//       });
+//       await newService.save({ session });
+  
+//       // Commit the transaction
+//       await session.commitTransaction();
+//       session.endSession();
+  
+//       // Optionally, send an OTP to the worker's email for verification.
+//       await sendOTP(email, newUser._id);
+  
+//       res.status(201).json({
+//         message: "Worker registered successfully! Please verify your email with OTP.",
+//         userId: newUser._id,
+//       });
+//     } catch (error) {
+//       // Abort the transaction on error
+//       await session.abortTransaction();
+//       session.endSession();
+//       console.error("Worker Signup Error:", error);
+//       res.status(500).json({ message: "Server error. Please try again later." });
+//     }
+//   });
+
+// userRoutes.post("/worker-signup", async (req, res) => {
+//   const session = await mongoose.startSession();
+//   session.startTransaction();
+//   try {
+//     const {
+//       username,
+//       password,
+//       first_name,
+//       last_name,
+//       email,
+//       phone,
+//       address,
+//       skills,           // an array e.g., ["Plumbing", "Electrical"]
+//       hourlyRate,       // number value
+//       serviceDescription,
+//       schedule,         // object containing availability info
+//     } = req.body;
+
+//     // Check if user already exists
+//     const existingUser = await User.findOne({
+//       $or: [{ username }, { email }]
+//     }).session(session);
+//     if (existingUser) {
+//       await session.abortTransaction();
+//       session.endSession();
+//       return res.status(400).json({ message: "Username or email already exists." });
+//     }
+
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Create new user document
+//     const newUser = new User({
+//       username,
+//       password: hashedPassword,
+//       first_name,
+//       last_name,
+//       email,
+//       phone,
+//       role: "provider",
+//       address,
+//       isVerified: false,
+//     });
+//     await newUser.save({ session });
+
+//     // Create the service document first
+//     const newService = new Service({
+//       user_id: newUser._id,
+//       type: skills,  // If you expect multiple skills, this can be an array.
+//       description: serviceDescription,
+//       hourly_rate: hourlyRate,
+//     });
+//     await newService.save({ session });
+
+//     // Now create the service provider document with a reference to the service
+//     const newServiceProvider = new ServiceProvider({
+//       user_id: newUser._id,
+//       status: "pending", // or "verified" based on your business logic
+//       services: [newService._id], // Include the service reference here
+//       availability: schedule,
+//       ratings: 0,
+//       reviews_count: 0,
+//     });
+//     await newServiceProvider.save({ session });
+
+//     // Commit the transaction
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     // Optionally, send an OTP to the worker's email for verification.
+//     await sendOTP(email, newUser._id);
+
+//     res.status(201).json({
+//       message: "Worker registered successfully! Please verify your email with OTP.",
+//       userId: newUser._id,
+//     });
+//   } catch (error) {
+//     // Abort the transaction on error
+//     await session.abortTransaction();
+//     session.endSession();
+//     console.error("Worker Signup Error:", error);
+//     res.status(500).json({ message: "Server error. Please try again later." });
+//   }
+// });
+
+
 userRoutes.post("/worker-signup", async (req, res) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-      const {
-        username,
-        password,
-        first_name,
-        last_name,
-        email,
-        phone,
-        address,
-        skills,           // an array e.g., ["Plumbing", "Electrical"]
-        hourlyRate,       // number value
-        serviceDescription,
-        schedule,         // object containing availability info
-      } = req.body;
-  
-      // Check if user already exists
-      const existingUser = await User.findOne({
-        $or: [{ username }, { email }]
-      }).session(session);
-      if (existingUser) {
-        await session.abortTransaction();
-        session.endSession();
-        return res.status(400).json({ message: "Username or email already exists." });
-      }
-  
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Create new user document
-      const newUser = new User({
-        username,
-        password: hashedPassword,
-        first_name,
-        last_name,
-        email,
-        phone,
-        role: "provider",
-        address,
-        isVerified: false,
-      });
-      await newUser.save({ session });
-  
-      // Create service provider document that references the new user
-      const newServiceProvider = new ServiceProvider({
-        user_id: newUser._id,
-        status: "pending", // or "verified" based on your business logic
-        availability: schedule,
-        ratings: 0,
-        reviews_count: 0,
-        // Optionally, you can also store an array of services if available
-      });
-      await newServiceProvider.save({ session });
-  
-      // Create a service document if the worker provides a service.
-      // For multiple skills, you can loop through skills to create multiple documents.
-      // Here we assume only one service is registered for simplicity.
-      const newService = new Service({
-        user_id: newUser._id,
-        type: skills,  // use the first skill or loop through skills if necessary
-        description: serviceDescription,
-        hourly_rate: hourlyRate,
-      });
-      await newService.save({ session });
-  
-      // Commit the transaction
-      await session.commitTransaction();
-      session.endSession();
-  
-      // Optionally, send an OTP to the worker's email for verification.
-      await sendOTP(email, newUser._id);
-  
-      res.status(201).json({
-        message: "Worker registered successfully! Please verify your email with OTP.",
-        userId: newUser._id,
-      });
-    } catch (error) {
-      // Abort the transaction on error
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const {
+      username,
+      password,
+      first_name,
+      last_name,
+      email,
+      phone,
+      address,
+      skills,           // an array e.g., ["Plumbing", "Electrical"]
+      hourlyRate,       // number value
+      serviceDescription,
+      schedule,         // object containing availability info
+    } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email }]
+    }).session(session);
+    if (existingUser) {
       await session.abortTransaction();
       session.endSession();
-      console.error("Worker Signup Error:", error);
-      res.status(500).json({ message: "Server error. Please try again later." });
+      return res.status(400).json({ message: "Username or email already exists." });
     }
-  });
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user document
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      first_name,
+      last_name,
+      email,
+      phone,
+      role: "provider",
+      address,
+      isVerified: false,
+    });
+    await newUser.save({ session });
+
+    // Create the service provider document with embedded service information.
+    // Since it's a one-to-one relationship, we include service details directly.
+    const newServiceProvider = new ServiceProvider({
+      user_id: newUser._id,
+      status: "pending", // or "verified" based on your business logic
+      services: skills,  // directly store the service types as an array of strings
+      description: serviceDescription,  // service details embedded here
+      hourly_rate: hourlyRate,           // service rate embedded here
+      availability: schedule,
+      ratings: 0,
+      reviews_count: 0,
+    });
+    await newServiceProvider.save({ session });
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    // Optionally, send an OTP to the worker's email for verification.
+    await sendOTP(email, newUser._id);
+
+    res.status(201).json({
+      message: "Worker registered successfully! Please verify your email with OTP.",
+      userId: newUser._id,
+    });
+  } catch (error) {
+    // Abort the transaction on error
+    await session.abortTransaction();
+    session.endSession();
+    console.error("Worker Signup Error:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
+
+
 
 userRoutes.post("/send-otp", async (req, res) => {
     try {

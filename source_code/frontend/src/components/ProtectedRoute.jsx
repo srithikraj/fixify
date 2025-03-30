@@ -34,7 +34,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
   // Redirect to unauthorized if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/unauthorized" />;
+    return <Navigate to="/login" />;
   }
 
   // If allowedRoles is provided and user's role isn't included, redirect to unauthorized page
