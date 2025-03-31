@@ -151,7 +151,6 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/signin");
   };
 
   const menuItems = [
