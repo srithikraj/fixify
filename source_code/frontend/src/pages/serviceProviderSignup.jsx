@@ -305,7 +305,7 @@ const ServiceProviderSignup = () => {
                       helperText={errors.lastName}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       label="Email"
@@ -318,7 +318,7 @@ const ServiceProviderSignup = () => {
                       helperText={errors.email}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       label="Password"
@@ -331,7 +331,7 @@ const ServiceProviderSignup = () => {
                       helperText={errors.password}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       label="Phone"
@@ -344,7 +344,7 @@ const ServiceProviderSignup = () => {
                       helperText={errors.phone}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       label="Address Line 1"
@@ -415,7 +415,7 @@ const ServiceProviderSignup = () => {
             {activeStep === 1 && (
               <Box component="form" noValidate onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <FormControl fullWidth error={!!errors.skills}>
                       <InputLabel>Skills</InputLabel>
                       <Select
@@ -437,7 +437,7 @@ const ServiceProviderSignup = () => {
                       )}
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       label="Hourly Rate ($)"
