@@ -1,27 +1,30 @@
-import { 
-  Dialog, DialogTitle, DialogContent, DialogActions, 
-  Box, Avatar, Button, TextField, Typography, IconButton, 
-  Select, MenuItem 
+import {
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  Box, Avatar, Button, TextField, Typography, IconButton,
+  Select, MenuItem
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  console.log(worker);
-
+  const [fullName, setFullName] = useState(["", ""])
+  const [address, setAddress] = useState(["", ""])
+  const [phone, setPhone] = useState("")
+  const [services, setServices] = useState([])
+  useEffect(() => {
+    if (worker && worker.userDetails) {
+      setFullName([worker.userDetails.first_name, worker.userDetails.last_name]);
+      setAddress([worker.userDetails.address.line1, worker.userDetails.address.postal_code]);
+      setPhone(worker.userDetails.phone);
+      setServices(worker.services || []);
+    }
+  }, [worker]);
   if (!worker) return null;
 
   const handleDeleteClick = () => {
     setDeleteDialogOpen(true);
   };
-
-  const handleConfirmDelete = () => {
-    // Perform the delete action here (e.g., API call to delete account)
-    setDeleteDialogOpen(false);
-    handleClose();
-  };
-
 
   const handleDelete = async (workerId) => {
     try {
@@ -37,12 +40,67 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
       const result = await response.json();
       console.log(result.message);
       setDeleteDialogOpen(false);
-      handleClose(); // Closing both modals
-      // Optionally, notify the parent component that the customer has been deleted
+      handleClose();
     } catch (error) {
       console.error("Error deleting worker:", error);
     }
   };
+  const handleServicesChange = (event) => {
+    const newServices = event.target.value.split(",").map(service => service.trim());
+    setServices(newServices);
+  };
+  const handleFullNameChange = (e) => {
+    const nameParts = e.target.value.split(" ");
+    setFullName([nameParts[0], nameParts[1]]);
+  };
+  const handleAddressChange = (e) => {
+    const fullAddress = e.target.value;
+    const addressParts = fullAddress.split(" ");
+    setAddress([addressParts[0], addressParts[1]]);
+  };
+  const handleSave = async () => {
+    const userData = {
+      _id: worker._id, // Use worker's _id
+      user_id: worker.user_id, // Use worker's user_id
+      status: worker.status, // Use worker's current status (assuming 'verified' is default or static)
+      services: services, // Use the updated services array from state
+      ratings: worker.ratings, // Use worker's ratings
+      reviews_count: worker.reviews_count, // Use worker's review count
+      userDetails: {
+        ...worker.userDetails, // Spread existing userDetails object
+        first_name: fullName[0], // Update first name from state
+        last_name: fullName[1], // Update last name from state
+        phone: phone, // Update phone number from state
+        address: {
+          ...worker.userDetails.address, // Spread existing address object
+          line1: address[0], // Update address line1 from state
+          unit_no: "", // You can handle this with state if necessary
+          postal_code: address[1], // Update postal code from state
+          // Optionally, other fields like province, country, longitude, latitude can be updated if needed
+        }
+      }
+    };
+    try {
+      const response = await fetch(`http://localhost:3000/users/${worker.user_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user details");
+      }
+
+      const result = await response.json();
+      console.log("User details updated successfully:", result);
+      handleClose();
+    } catch (error) {
+      console.error("Error updating user details:", error);
+    }
+  };
+
 
   return (
     <>
@@ -69,17 +127,17 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
             </Box>
 
             {/* Full Name & Email */}
-            <TextField label="Full Name" fullWidth value={worker.userDetails.first_name + " " + worker.userDetails.last_name} />
+            <TextField label="Full Name" fullWidth value={fullName.join(" ")} onChange={handleFullNameChange} />
 
             {/* Company & Position */}
-            <TextField label="Phone" fullWidth value="(123)-345-3434" />
-            <TextField label="Services Provided" fullWidth value={worker.services} />
-            <TextField label="Address" fullWidth value={worker.userDetails.address.line1 + " " + worker.userDetails.address.postal_code}/>
+            <TextField label="Phone" fullWidth value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <TextField label="Services Provided" fullWidth value={services} onChange={handleServicesChange} />
+            <TextField label="Address" fullWidth value={address.join(" ")} onChange={handleAddressChange} />
 
             {/* Account Details */}
             <Typography variant="h6">Account Details</Typography>
             <TextField label="Log in email address" fullWidth value={worker.userDetails.email} disabled />
-            <TextField label="Password" fullWidth type="password" value="*********" />
+            <TextField label="Password" fullWidth type="password" value="*********" disabled />
 
             {/* Delete Account */}
             <Typography color="error">
@@ -92,7 +150,7 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
-          <Button variant="contained" color="primary">Save Changes</Button>
+          <Button variant="contained" color="primary" onClick={handleSave}>Save Changes</Button>
         </DialogActions>
       </Dialog>
 
