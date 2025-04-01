@@ -38,6 +38,7 @@ const ManageCustomers = () => {
     setOpen(true);
   };
 
+
   // Function to close modal
   const handleClose = () => {
     setOpen(false);

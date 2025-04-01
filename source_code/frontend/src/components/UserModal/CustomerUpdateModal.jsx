@@ -5,6 +5,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useState, useEffect } from "react";
 
+
 const CustomerUpdateModal = ({ open, handleClose, customer }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fullName, setFullName] = useState(["", ""])

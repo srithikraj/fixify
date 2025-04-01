@@ -58,6 +58,7 @@ const ServiceProviderUpdateModal = ({ open, handleClose, worker }) => {
     const addressParts = fullAddress.split(" ");
     setAddress([addressParts[0], addressParts[1]]);
   };
+  
   const handleSave = async () => {
     const userData = {
       _id: worker._id, // Use worker's _id
