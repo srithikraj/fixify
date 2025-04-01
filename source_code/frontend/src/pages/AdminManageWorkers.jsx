@@ -16,15 +16,14 @@ import ServiceProviderUpdateModal from "../components/serviceProviderModal/Servi
 
 const ManageWorkers = () => {
   const [open, setOpen] = useState(false);
-  const [selectedWorker, setSelectedWorker] = useState(null);
+  const [selectedWorker, setSelectedWorker] = useState();
   const [workers, setWorker] = useState([]);
-  console.log(workers);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  console.log(workers);
+
 
   async function fetchData() {
     try {
@@ -52,7 +51,8 @@ const ManageWorkers = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedWorker(null);
+    setSelectedWorker();
+    fetchData();
   };
 
   // New function to handle verification
@@ -79,7 +79,7 @@ const ManageWorkers = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", marginLeft: 15,marginTop: 5, p: 3 }}>
+    <Box sx={{ width: "100%", marginLeft: 15, marginTop: 5, p: 3 }}>
       <Typography variant="h4" fontWeight="bold">
         Manage Workers
       </Typography>
@@ -126,7 +126,7 @@ const ManageWorkers = () => {
                     >
                       Verify
                     </Button>
-                )}
+                  )}
                 </TableCell>
               </TableRow>
             ))}

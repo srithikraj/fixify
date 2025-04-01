@@ -42,6 +42,7 @@ const ManageCustomers = () => {
   const handleClose = () => {
     setOpen(false);
     setSelectedCustomer(null);
+    handleFetchUsers();
   };
   const handleFetchUsers = async () => {
     try {
@@ -60,7 +61,7 @@ const ManageCustomers = () => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
   return (
-    <Box sx={{ width: "80%", marginLeft: 15,marginTop: 5, p: 3 }}>
+    <Box sx={{ width: "80%", marginLeft: 15, marginTop: 5, p: 3 }}>
       <Typography variant="h4" fontWeight="bold">Manage Customers</Typography>
       <TextField fullWidth label="Search customers..." sx={{ my: 2 }} />
 
