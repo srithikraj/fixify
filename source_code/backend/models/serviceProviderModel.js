@@ -15,8 +15,8 @@ const serviceProviderSchema = new Schema({
         ],
         required: true
       }],
-      description: { type: String, trim: true, required: true },
-      hourly_rate: { type: Number, required: true, min: 0 },
+    description: { type: String, trim: true, required: true },
+    hourly_rate: { type: Number, required: true, min: 0 },
     availability: {
         Monday: { type: [String], default: [] },
         Tuesday: { type: [String], default: [] },
