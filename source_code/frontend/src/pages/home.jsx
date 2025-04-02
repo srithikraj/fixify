@@ -32,7 +32,7 @@ function Home() {
           ⭐ Customer Reviews ⭐
         </Typography>
         <Grid container spacing={2} justifyContent="center">
-          {reviews.map((review, index) => (
+          {reviews.slice(0, 3).map((review, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
               <ReviewCard review={review} />
             </Grid>
