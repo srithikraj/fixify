@@ -1,0 +1,190 @@
+diff --git a/source_code/backend/assets/loadUsers.js b/source_code/backend/assets/loadUsers.js
+index 358b18a..38976c2 100644
+--- a/source_code/backend/assets/loadUsers.js
++++ b/source_code/backend/assets/loadUsers.js
+@@ -2,6 +2,8 @@ require("dotenv").config({ path: "./config.env" });
+ const mongoose = require('mongoose');
+ const bcrypt = require('bcrypt');
+ const User = require('../models/userModel');
++const ServiceProvider = require('../models/serviceProviderModel');
++const nodemailer = require("nodemailer");
+ 
+ async function connectToDatabase() {
+     try {
+@@ -44,6 +46,120 @@ async function insertAdminUser() {
+     }
+ }
+ 
++async function insertServiceProviderUser() {
++    try {
++        const hashedPassword = await bcrypt.hash("serviceProvider", 10);
++
++        // Create a service provider user
++        const user = new User({
++            username: "johndoe",
++            password: hashedPassword,
++            email: "johndoe@gmail.com",
++            phone: "1234567890",
++            first_name: "John",
++            last_name: "Doe",
++            role: "provider",
++            isVerified: true,
++            address: {
++                line1: "10 abc street",
++                city: "Toronto",
++                postal_code: "A1B2C3",
++                province: "Ontario",
++                country: "Canada",
++                longitude: -79.3832,
++                latitude: 43.6532
++            },
++        });
++        // Save the user
++        await user.save();
++        console.log("Service Provider user inserted successfully in User collection");
++
++        // Create a service provider profile
++        const serviceProvider = new ServiceProvider({
++            status: "verified",
++            ratings: 4.2,
++            services: ["Plumbing", "Electrical"],
++            reviews_count: 10,
++            user_id: user._id,
++            description: "Experienced service provider with expertise in plumbing and electrical work.",
++            hourly_rate: 50,
++            availability: {
++                Monday: ["9:00 AM - 5:00 PM"],
++                Tuesday: ["9:00 AM - 5:00 PM"],
++                Wednesday: ["9:00 AM - 5:00 PM"],
++                Thursday: ["9:00 AM - 5:00 PM"],
++                Friday: ["9:00 AM - 5:00 PM"],
++                Saturday: [],
++                Sunday: []
++            }
++        });
++
++        // Save the service provider profile
++        await serviceProvider.save();
++        console.log("Service Provider user inserted successfully in Service Provider collection");
++    } catch (error) {
++        console.error("Error inserting Service Provider user:", error);
++        throw error;
++    }
++}
++
++async function insertUnverifiedServiceProviderUser() {
++    try {
++        const hashedPassword = await bcrypt.hash("serviceProvider", 10);
++
++        // Create a service provider user
++        const user = new User({
++            username: "jakesmith",
++            password: hashedPassword,
++            email: "jakesmith@gmail.com",
++            phone: "1234567890",
++            first_name: "Jake",
++            last_name: "Smith",
++            role: "provider",
++            isVerified: true,
++            address: {
++                line1: "10 abc street",
++                city: "Toronto",
++                postal_code: "A1B2C3",
++                province: "Ontario",
++                country: "Canada",
++                longitude: -79.3832,
++                latitude: 43.6532
++            },
++        });
++        // Save the user
++        await user.save();
++        console.log("Service Provider user inserted successfully in User collection");
++
++        // Create a service provider profile
++        const serviceProvider = new ServiceProvider({
++            status: "pending",
++            ratings: 0.0,
++            services: ["Plumbing", "Electrical"],
++            reviews_count: 0,
++            user_id: user._id,
++            description: "Experienced service provider with expertise in plumbing and electrical work.",
++            hourly_rate: 50,
++            availability: {
++                Monday: ["9:00 AM - 5:00 PM"],
++                Tuesday: ["9:00 AM - 5:00 PM"],
++                Wednesday: ["9:00 AM - 5:00 PM"],
++                Thursday: ["9:00 AM - 5:00 PM"],
++                Friday: ["9:00 AM - 5:00 PM"],
++                Saturday: [],
++                Sunday: []
++            }
++        });
++
++        // Save the service provider profile
++        await serviceProvider.save();
++        console.log("Service Provider user inserted successfully in Service Provider collection");
++    } catch (error) {
++        console.error("Error inserting Unverified Service Provider user:", error);
++        throw error;
++    }
++}
++
+ // async function main() {
+ //     try {
+ //         await connectToDatabase();
+@@ -56,4 +172,6 @@ async function insertAdminUser() {
+ // main();
+ 
+ exports.connectToDatabase = connectToDatabase;
+-exports.insertAdminUser = insertAdminUser;
+\ No newline at end of file
++exports.insertAdminUser = insertAdminUser;
++exports.insertServiceProviderUser = insertServiceProviderUser;
++exports.insertUnverifiedServiceProviderUser = insertUnverifiedServiceProviderUser;
+\ No newline at end of file
+diff --git a/source_code/backend/models/serviceProviderModel.js b/source_code/backend/models/serviceProviderModel.js
+index 28477a8..ffd7fb1 100644
+--- a/source_code/backend/models/serviceProviderModel.js
++++ b/source_code/backend/models/serviceProviderModel.js
+@@ -15,8 +15,8 @@ const serviceProviderSchema = new Schema({
+         ],
+         required: true
+       }],
+-      description: { type: String, trim: true, required: true },
+-      hourly_rate: { type: Number, required: true, min: 0 },
++    description: { type: String, trim: true, required: true },
++    hourly_rate: { type: Number, required: true, min: 0 },
+     availability: {
+         Monday: { type: [String], default: [] },
+         Tuesday: { type: [String], default: [] },
+diff --git a/source_code/backend/tests/userRoutes.test.js b/source_code/backend/tests/userRoutes.test.js
+index b64dd83..1016ffc 100644
+--- a/source_code/backend/tests/userRoutes.test.js
++++ b/source_code/backend/tests/userRoutes.test.js
+@@ -32,7 +32,7 @@ afterAll(async () => {
+     await mongoServer.stop();
+ });
+ 
+-test("Test Admin Login", async () => {
++test("Test Admin Successful Login", async () => {
+     const response = await request(app)
+         .post("/users/login")
+         .send({ username: "admin", password: "admin" });
+@@ -44,4 +44,16 @@ test("Test Admin Login", async () => {
+     expect(response.body.user).toBeDefined();
+     expect(response.body.user.username).toBe("admin");
+     expect(response.body.user.role).toBe("admin");
++});
++
++test("Test Admin Unsuccessful Login", async () => {
++    const response = await request(app)
++        .post("/users/login")
++        .send({ username: "admin", password: "wrongpassword" });
++
++    expect(response.status).toBe(401);
++    expect(response.body.success).toBe(false);
++    expect(response.body.message).toBe("Login Failed! Incorrect Password!");
++    expect(response.body.token).toBeUndefined();
++    expect(response.body.user).toBeUndefined();
+ });
+\ No newline at end of file
