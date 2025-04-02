@@ -32,7 +32,7 @@ afterAll(async () => {
     await mongoServer.stop();
 });
 
-test("Test Admin Login", async () => {
+test("Test Admin Successful Login", async () => {
     const response = await request(app)
         .post("/users/login")
         .send({ username: "admin", password: "admin" });
@@ -44,4 +44,16 @@ test("Test Admin Login", async () => {
     expect(response.body.user).toBeDefined();
     expect(response.body.user.username).toBe("admin");
     expect(response.body.user.role).toBe("admin");
+});
+
+test("Test Admin Unsuccessful Login", async () => {
+    const response = await request(app)
+        .post("/users/login")
+        .send({ username: "admin", password: "wrongpassword" });
+
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Login Failed! Incorrect Password!");
+    expect(response.body.token).toBeUndefined();
+    expect(response.body.user).toBeUndefined();
 });
