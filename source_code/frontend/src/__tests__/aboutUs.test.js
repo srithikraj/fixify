@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import AboutUs from '../pages/AboutUs'; // Adjust path as needed
+import Aboutus from '../pages/Aboutus';
 
 jest.mock('../assets/logo.png', () => 'mocked-logo.png');
 
 describe('AboutUs Component', () => {
   beforeEach(() => {
-    render(<AboutUs />);
+    render(<Aboutus />);
   });
 
   test('renders without crashing', () => {
