@@ -3,6 +3,13 @@ import Navbar from '../components/Navbar/Navbar.jsx';
 import WorkerContactModal from '../components/UserModal/WorkerContactModal.jsx';
 import { getAllServiceProviders, getVerifiedServiceProviders } from '../api/serviceProviderApi';
 
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Typography from '@mui/material/Typography';
+import PhoneIcon from '@mui/icons-material/Phone';
+
+
 const services_offered = [
   "Plumbing", "Electrical", "Carpentry", "Painting", "Cleaning", 
   "HVAC Repair", "Gardening", "Pest Control", "Roofing", "Masonry", 
@@ -246,9 +253,26 @@ const FindService = () => {
 
               {/* Back side of the card */}
               <div className="card-back">
-                <p><strong>Location:</strong> {getLocationString(profile.userDetails.address)} </p>
-                <p><strong>Services:</strong> {profile.services.join(", ")}</p>
-                <button 
+              {/* <p><strong>Location:</strong> {getLocationString(profile.userDetails.address)} </p> */}
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <LocationOnIcon color="primary" />
+                <Typography variant="body1">
+                  {getLocationString(profile.userDetails.address)}
+                </Typography>
+              </Stack>
+                {/* <p><strong>Location:</strong> {getLocationString(profile.userDetails.address)} </p> */}
+                {/* <p><strong>Services:</strong> {profile.services.join(", ")}</p> */}
+                <Stack direction="row" spacing={1} flexWrap="wrap">
+                  {profile.services.map((service, index) => (
+                    <Chip key={index} label={service} />
+                  ))}
+                </Stack>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <PhoneIcon color="primary" />
+                  <Typography variant="body1">
+                    {profile.userDetails.phone}
+                  </Typography>
+                </Stack>                <button 
                   className="contact-btn" 
                   onClick={() => handleContactClick(profile)}
                 >
