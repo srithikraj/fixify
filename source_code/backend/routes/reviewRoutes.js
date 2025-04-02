@@ -51,6 +51,42 @@ reviewRoutes.get("/reviews/worker-reviews/:workerId", async (req, res) => {
   });
 
 
+  /// write review
+
+  reviewRoutes.post("/reviews", async (req, res) => {
+    try {
+      const { consumer, provider, description, rating } = req.body;
+  
+      // Validate input: ensure rating is provided and is between 1 and 5
+      if (!consumer || !provider || !description || rating === undefined || rating < 1 || rating > 5) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "All fields are required and rating must be between 1 and 5." 
+        });
+      }
+      
+      console.log("Creating review:", req.body);
+  
+      // Create a new review instance
+      const newReview = new Review({
+        consumer,
+        provider,
+        description,
+        rating
+      });
+  
+      // Save the review to the database
+      const savedReview = await newReview.save();
+  
+      res.status(201).json({ success: true, review: savedReview });
+    } catch (error) {
+      console.error("Error creating review:", error);
+      res.status(500).json({ success: false, message: "Server error while creating review" });
+    }
+  });
+  
+
+
 //////////////////////////////////////////////////////////////////////////
 // Update Routes
 //////////////////////////////////////////////////////////////////////////
