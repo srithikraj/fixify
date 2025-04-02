@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Aboutus from '../pages/Aboutus';
-
+import Aboutus from "../pages/Aboutus" 
 jest.mock('../assets/logo.png', () => 'mocked-logo.png');
 
 describe('AboutUs Component', () => {
