@@ -24,11 +24,5 @@ const userSchema = new Schema({
     }
 }, { timestamps: true });
 
-userSchema.methods.isValidPassword = async function (password) {
-	const user = this;
-	const hash = await bcrypt.hash(password, 10);
-	const compare = await bcrypt.compare(password, user.password);
-	return compare;
-  };
 
 module.exports = mongoose.model("user", userSchema, "users");
