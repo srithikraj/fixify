@@ -5,15 +5,15 @@ const User = require('../models/userModel');
 const ServiceProvider = require('../models/serviceProviderModel');
 const nodemailer = require("nodemailer");
 
-async function connectToDatabase() {
-    try {
-        await mongoose.connect(process.env.ATLAS_URI);
-        console.log("Database connection established");
-    } catch (error) {
-        console.error("Error connecting to the database:", error);
-        throw error;
-    }
-}
+// async function connectToDatabase() {
+//     try {
+//         await mongoose.connect(process.env.ATLAS_URI);
+//         console.log("Database connection established");
+//     } catch (error) {
+//         console.error("Error connecting to the database:", error);
+//         throw error;
+//     }
+// }
 
 async function insertAdminUser() {
     try {
@@ -171,7 +171,7 @@ async function insertUnverifiedServiceProviderUser() {
 
 // main();
 
-exports.connectToDatabase = connectToDatabase;
+// exports.connectToDatabase = connectToDatabase;
 exports.insertAdminUser = insertAdminUser;
 exports.insertServiceProviderUser = insertServiceProviderUser;
 exports.insertUnverifiedServiceProviderUser = insertUnverifiedServiceProviderUser;
