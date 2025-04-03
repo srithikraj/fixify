@@ -27,11 +27,11 @@ let userRoutes = express.Router()
  * Description: Verify user login info. Returns user info upon success.
 */
 
-userRoutes.route("/users").get(async (request, response) => {
-  let db = database.getDb()
-  let data = await db.collection("users").find({}).toArray()
-  response.json({ data })
-})
+// userRoutes.route("/users").get(async (request, response) => {
+//     let db = database.getDb()
+//     let data = await db.collection("users").find({}).toArray()
+//     response.json({ data })
+// })
 
 userRoutes.route("/users/login").post(async (request, response) => {
   try {
