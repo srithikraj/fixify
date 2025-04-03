@@ -91,3 +91,50 @@ describe("Service Provider Routes", () => {
     expect(secondProvider.status).toBe("pending");
   });
 });
+
+describe("PUT /serviceProviders/:id", () => {
+  let token;
+  let serviceProviderId;
+
+  beforeEach(async () => {
+    // Log in as admin to get a token
+    const loginResponse = await request(app)
+      .post("/users/login")
+      .send({ username: "admin", password: "admin" });
+    token = loginResponse.body.token;
+
+    // Retrieve all service providers and find the pending one (Jake)
+    const getResponse = await request(app)
+      .get("/serviceProviders")
+      .set("Authorization", `Bearer ${token}`);
+    const pendingProvider = getResponse.body.data.find(
+      (provider) => provider.userDetails.first_name === "Jake"
+    );
+    serviceProviderId = pendingProvider._id;
+  });
+
+  test("should update the service provider status to verified", async () => {
+    // Update the status of the pending service provider to verified
+    const updateResponse = await request(app)
+      .put(`/serviceProviders/${serviceProviderId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({ status: "verified" });
+    
+    expect(updateResponse.status).toBe(200);
+    expect(updateResponse.body.data).toHaveProperty("status", "verified");
+    // Optionally, you can also check that the user's details remain intact
+    expect(updateResponse.body.data.status).toBe("verified");
+  });
+
+  test("should return 404 if service provider is not found", async () => {
+    // Generate a fake ObjectId that doesn't exist in the database
+    const fakeId = new mongoose.Types.ObjectId();
+    const response = await request(app)
+      .put(`/serviceProviders/${fakeId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({ status: "verified" });
+  
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("error", "Worker not found");
+  });
+});
