@@ -40,3 +40,6 @@ __pycache__/
 chromedriver.exe
 geckodriver.exe
 msedgedriver.exe
+
+# Ignore coverage reports
+coverage/
